@@ -18,10 +18,7 @@
 // DEBUG
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS FALSE
-
-# ifndef DEBUG
-#  define DEBUG FALSE
-# endif
+# define SHOW_MINIMAP TRUE
 
 // MAP CHARACTERS
 # define WALL			'#'
@@ -50,11 +47,6 @@
 # define BUFFER_SIZE 64
 
 //==============================STRUCTS
-typedef struct s_int_xy
-{
-	int	x;
-	int	y;
-}			t_int_xy;
 
 typedef struct s_float_xy
 {
@@ -62,20 +54,12 @@ typedef struct s_float_xy
 	float	y;
 }			t_float_xy;
 
-typedef struct s_entity_state
+typedef struct s_entity
 {
 	float		x;
 	float		y;
 	t_float_xy	dir;
-}			t_entity_state;
-
-typedef struct s_entity_start
-{
-	int				x;
-	int				y;
-	t_float_xy		dir;
-
-}			t_entity_start;
+}			t_entity;
 
 typedef struct s_frames
 {
@@ -88,30 +72,36 @@ typedef struct s_game
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
 	SDL_Event		event;
-	t_entity_start	**player_start;
-	t_entity_state	*player;
-	t_entity_start	***enemy_start;
-	t_entity_state	**enemy;
+	int				wind_height;
+	int				wind_width;
+	int				i;
+	t_entity		**player;
+	t_entity		***enemy;
 	t_frames		*frames;
-	float			fps;
 	char 			***maps;
+	float			fps;
 }			t_game;
 
 # define WINDOW game->window
 # define RENDERER game->renderer
-# define MAPS game->maps
 # define EVENT game->event
+# define WIND_HEIGHT game->wind_height
+# define WIND_WIDTH game->wind_width
+# define I game->i
+# define PLAYER game->player
+# define ENEMY game->ENEMY
 # define FPS game->fps
+# define MAPS game->maps
 # define FRAME_START game->frames->frame_start
 # define FRAME_TIME game->frames->frame_time
 
 //==============================FUNCTIONS
 // CHAPTERS
-void	chapter_1(t_game *game, int *i, int *running);
-void	chapter_2(t_game *game, int *i, int *running);
-void	chapter_3(t_game *game, int *i, int *running);
-void	chapter_4(t_game *game, int *i, int *running);
-void	chapter_5(t_game *game, int *i, int *running);
+void	chapter_1(t_game *game, int *running);
+void	chapter_2(t_game *game, int *running);
+void	chapter_3(t_game *game, int *running);
+void	chapter_4(t_game *game, int *running);
+void	chapter_5(t_game *game, int *running);
 
 // CLEANUP
 void	cleanup(t_game *game);
@@ -130,6 +120,9 @@ char	*get_path(int i);
 
 // INIT
 t_game	*game_init();
+
+// RENDER
+void	render_next_frame(t_game *game);
 
 // UTILS
 char	*get_next_line(int fd);

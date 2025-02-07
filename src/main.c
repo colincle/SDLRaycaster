@@ -8,6 +8,7 @@
 void	quit_game(t_game *game)
 {
 	SDL_DestroyWindow(WINDOW);
+	SDL_DestroyRenderer(RENDERER);
 	SDL_Quit();
 	cleanup(game);
 }
@@ -28,16 +29,15 @@ void frame_sync(t_game *game)
 void	game_loop(t_game *game)
 {
 	int		running;
-	void (*chapter[])(t_game *game, int *i, int *running) = {chapter_1, chapter_2, chapter_3, chapter_4, chapter_5};
+	void (*chapter[])(t_game *game, int *running) = {chapter_1, chapter_2, chapter_3, chapter_4, chapter_5};
 	running = TRUE;
-	int		i = 0;
-
+	I = 0;
 	while (running)
 	{
 		FRAME_START = SDL_GetTicks();
-		chapter[i](game, &i, &running);
+		chapter[I](game, &running);
 		handle_events(game, &running);
-		//render_next_frame(game); to do
+		render_next_frame(game);
 		frame_sync(game);
 	}
 }
@@ -59,3 +59,4 @@ TO DO
 - Handle collisions
 - Raycast
 */
+		

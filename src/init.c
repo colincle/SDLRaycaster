@@ -19,57 +19,57 @@ void find_entities(t_game *game, int i)
 			if (MAPS[i][y][x] == P_NORTH || MAPS[i][y][x] == P_SOUTH ||
 				MAPS[i][y][x] == P_WEST || MAPS[i][y][x] == P_EAST)
 			{
-				game->player_start[i] = malloc(sizeof(t_entity_start));
-				game->player_start[i]->x = x;
-				game->player_start[i]->y = y;
+				game->player[i] = malloc(sizeof(t_entity));
+				game->player[i]->x = x + 0.5;
+				game->player[i]->y = y + 0.5;
 				if (MAPS[i][y][x] == P_NORTH)
 				{
-					game->player_start[i]->dir.x = 0; 
-					game->player_start[i]->dir.y = -1; 
+					game->player[i]->dir.x = 0; 
+					game->player[i]->dir.y = -1; 
 				}
 				if (MAPS[i][y][x] == P_SOUTH)
 				{
-					game->player_start[i]->dir.x = 0; 
-					game->player_start[i]->dir.y = 1; 
+					game->player[i]->dir.x = 0; 
+					game->player[i]->dir.y = 1; 
 				}
 				if (MAPS[i][y][x] == P_EAST)
 				{
-					game->player_start[i]->dir.x = 1; 
-					game->player_start[i]->dir.y = 0; 
+					game->player[i]->dir.x = 1; 
+					game->player[i]->dir.y = 0; 
 				}
 				if (MAPS[i][y][x] == P_WEST)
 				{
-					game->player_start[i]->dir.x = -1; 
-					game->player_start[i]->dir.y = 0; 
+					game->player[i]->dir.x = -1; 
+					game->player[i]->dir.y = 0; 
 				}
 				MAPS[i][y][x] = EMPTY;
 			}
 			if (MAPS[i][y][x] == E_NORTH || MAPS[i][y][x] == E_SOUTH ||
 				MAPS[i][y][x] == E_WEST || MAPS[i][y][x] == E_EAST)
 			{
-				game->enemy_start[i] = realloc(game->enemy_start[i], sizeof(t_entity_start *) * (e + 1));
-				game->enemy_start[i][e] = malloc(sizeof(t_entity_start));
-				game->enemy_start[i][e]->x = x;
-				game->enemy_start[i][e]->y = y;
+				game->enemy[i] = realloc(game->enemy[i], sizeof(t_entity *) * (e + 1));
+				game->enemy[i][e] = malloc(sizeof(t_entity));
+				game->enemy[i][e]->x = x + 0.5;
+				game->enemy[i][e]->y = y + 0.5;
 				if (MAPS[i][y][x] == E_NORTH)
 				{
-					game->enemy_start[i][e]->dir.x = 0; 
-					game->enemy_start[i][e]->dir.y = -1; 
+					game->enemy[i][e]->dir.x = 0; 
+					game->enemy[i][e]->dir.y = -1; 
 				}
 				if (MAPS[i][y][x] == E_SOUTH)
 				{
-					game->enemy_start[i][e]->dir.x = 0; 
-					game->enemy_start[i][e]->dir.y = 1; 
+					game->enemy[i][e]->dir.x = 0; 
+					game->enemy[i][e]->dir.y = 1; 
 				}
 				if (MAPS[i][y][x] == E_EAST)
 				{
-					game->enemy_start[i][e]->dir.x = 1; 
-					game->enemy_start[i][e]->dir.y = 0; 
+					game->enemy[i][e]->dir.x = 1; 
+					game->enemy[i][e]->dir.y = 0; 
 				}
 				if (MAPS[i][y][x] == E_WEST)
 				{
-					game->enemy_start[i][e]->dir.x = -1; 
-					game->enemy_start[i][e]->dir.y = 0; 
+					game->enemy[i][e]->dir.x = -1; 
+					game->enemy[i][e]->dir.y = 0; 
 				}
 				e++;
 				MAPS[i][y][x] = EMPTY;
@@ -84,11 +84,11 @@ void init_entities(t_game *game)
 {
 	int i = 0;
 
-	game->player_start = malloc(sizeof(t_entity_start *) * NUMBER_OF_MAPS);
-	game->enemy_start = malloc(sizeof(t_entity_start **) * NUMBER_OF_MAPS);
+	game->player = malloc(sizeof(t_entity *) * NUMBER_OF_MAPS);
+	game->enemy = malloc(sizeof(t_entity **) * NUMBER_OF_MAPS);
 	while (i < NUMBER_OF_MAPS)
 	{
-		game->enemy_start[i] = NULL;
+		game->enemy[i] = NULL;
 		find_entities(game, i);
 		i++;
 	}
@@ -141,7 +141,6 @@ void	graphics_init(t_game *game)
 		cleanup(game);
 		exit(EXIT_FAILURE);
 	}
-
 	WINDOW = SDL_CreateWindow("SDLRaycaster", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE);
 	if (!WINDOW)
 	{
@@ -150,6 +149,16 @@ void	graphics_init(t_game *game)
 		cleanup(game);
 		exit(EXIT_FAILURE);
 	}
+	RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED);
+	if (!RENDERER)
+	{
+		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+		SDL_Quit();
+		cleanup(game);
+		exit(EXIT_FAILURE);
+	}
+	SDL_GetWindowSize(WINDOW, &WIND_WIDTH, &WIND_HEIGHT);
+
 }
 
 t_game	*game_init()

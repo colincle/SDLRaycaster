@@ -12,30 +12,30 @@ void	free_entities(t_game *game)
 
 	if (!game)
 		return;
-	if (game->player_start)
+	if (game->player)
 	{
 		i = 0;
 		while (i < NUMBER_OF_MAPS)
-			free(game->player_start[i++]);
-		free(game->player_start);
-		game->player_start = NULL;
+			free(game->player[i++]);
+		free(game->player);
+		game->player = NULL;
 	}
-	if (game->enemy_start)
+	if (game->enemy)
 	{
 		i = 0;
 		while (i < NUMBER_OF_MAPS)
 		{
-			if (game->enemy_start[i])
+			if (game->enemy[i])
 			{
 				e = 0;
-				while (game->enemy_start[i][e])
-					free(game->enemy_start[i][e++]);
-				free(game->enemy_start[i]);
+				while (game->enemy[i][e])
+					free(game->enemy[i][e++]);
+				free(game->enemy[i]);
 			}
 			i++;
 		}
-		free(game->enemy_start);
-		game->enemy_start = NULL;
+		free(game->enemy);
+		game->enemy = NULL;
 	}
 }
 

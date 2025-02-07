@@ -21,20 +21,20 @@ void	print_entities(t_game *game)
 	while (i < NUMBER_OF_MAPS)
 	{
 		printf("Map %d:\n", i + 1);
-		if (game->player_start && game->player_start[i])
-			printf("  Player Start: X = %d, Y = %d, Dir = (%.1f, %.1f)\n",
-				game->player_start[i]->x, game->player_start[i]->y,
-				game->player_start[i]->dir.x, game->player_start[i]->dir.y);
+		if (game->player && game->player[i])
+			printf("  Player Start: X = %f, Y = %f, Dir = (%.1f, %.1f)\n",
+				game->player[i]->x, game->player[i]->y,
+				game->player[i]->dir.x, game->player[i]->dir.y);
 		else
 			printf("  No Player Found\n");
-		if (game->enemy_start && game->enemy_start[i])
+		if (game->enemy && game->enemy[i])
 		{
 			e = 0;
-			while (game->enemy_start[i][e])
+			while (game->enemy[i][e])
 			{
-				printf("  Enemy %d: X = %d, Y = %d, Dir = (%.1f, %.1f)\n",
-					e + 1, game->enemy_start[i][e]->x, game->enemy_start[i][e]->y,
-					game->enemy_start[i][e]->dir.x, game->enemy_start[i][e]->dir.y);
+				printf("  Enemy %d: X = %f, Y = %f, Dir = (%.1f, %.1f)\n",
+					e + 1, game->enemy[i][e]->x, game->enemy[i][e]->y,
+					game->enemy[i][e]->dir.x, game->enemy[i][e]->dir.y);
 				e++;
 			}
 		}

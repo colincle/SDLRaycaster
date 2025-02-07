@@ -13,5 +13,15 @@ void	handle_events(t_game *game, int *running)
 		{
 			*running = 0;
 		}
+		if (EVENT.type == SDL_WINDOWEVENT && EVENT.window.event == SDL_WINDOWEVENT_RESIZED)
+		{
+			WIND_WIDTH = EVENT.window.data1;
+			WIND_HEIGHT = EVENT.window.data2;
+			if (WIND_WIDTH / WIND_HEIGHT != 1,7777)
+			{
+				WIND_HEIGHT = WIND_WIDTH * 9 / 16;
+				SDL_SetWindowSize(WINDOW, WIND_WIDTH, WIND_HEIGHT);
+			}
+		}
 	}
 }

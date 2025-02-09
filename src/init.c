@@ -8,11 +8,15 @@
 void	set_player_cam(t_game *game, int i)
 {
 	double	fov_rad;
+	double	h_fov_rad;
+	double	aspect_ratio = (double)WIND_WIDTH / (double)WIND_HEIGHT;
 
 	fov_rad = (FOV * M_PI) / 180.0;
-	PLAYER[i]->cam.x = -PLAYER[i]->dir.y * tan(fov_rad / 2);
-	PLAYER[i]->cam.y = PLAYER[i]->dir.x * tan(fov_rad / 2);
+	h_fov_rad = 2 * atan(tan(fov_rad / 2) * aspect_ratio); 
+	PLAYER[i]->cam.x = -PLAYER[i]->dir.y * tan(h_fov_rad / 2);
+	PLAYER[i]->cam.y =  PLAYER[i]->dir.x * tan(h_fov_rad / 2);
 }
+
 
 void	find_entities(t_game *game, int i)
 {
@@ -20,6 +24,7 @@ void	find_entities(t_game *game, int i)
 	int	y = 0;
 	int	e = 0;
 
+	game->enemy[i] = NULL;
 	while (MAPS[i][y])
 	{
 		x = 0;
@@ -87,6 +92,7 @@ void	find_entities(t_game *game, int i)
 		}
 		y++;
 	}
+	game->enemy[i][e] = NULL;
 }
 
 void	init_entities(t_game *game)
@@ -128,10 +134,35 @@ void	init_maps(t_game *game)
 	MAPS[NUMBER_OF_MAPS] = NULL;
 }
 
+void	init_vector_grid(t_game *game)
+{
+	char	*path;
+	int		i = 1;
+
+	MAPS = malloc(sizeof(char **) * (NUMBER_OF_MAPS + 1));
+	if (!MAPS)
+		return ;
+	while (i <= NUMBER_OF_MAPS)
+	{
+		path = get_path(i);
+		MAPS[i - 1] = get_map(path);
+		free(path);
+		if (!MAPS[i - 1])
+		{
+			free(MAPS);
+			MAPS = NULL;
+			return ;
+		}
+		i++;
+	}
+	MAPS[NUMBER_OF_MAPS] = NULL;
+}
+
 void	game_struct_init(t_game *game)
 {
 	init_maps(game);
 	print_all_maps(game);
+	init_vector_grid(game);
 	init_entities(game);
 	print_entities(game);
 	KEYS = malloc(sizeof(int) * HOW_MANY_KEYS);
@@ -145,7 +176,7 @@ void	graphics_init(t_game *game)
 		cleanup(game);
 		exit(EXIT_FAILURE);
 	}
-	WINDOW = SDL_CreateWindow("SDLRaycaster", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE);
+	WINDOW = SDL_CreateWindow("SDLRaycaster", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if (!WINDOW)
 	{
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -171,7 +202,7 @@ t_game	*game_init(void)
 	game = malloc(sizeof(t_game));
 	if (!game)
 		exit(EXIT_FAILURE);
-	game_struct_init(game);
 	graphics_init(game);
+	game_struct_init(game);
 	return (game);
 }

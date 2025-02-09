@@ -37,6 +37,10 @@ void	handle_events(t_game *game, int *running)
 		{
 			*running = 0;
 		}
+		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_ESCAPE)
+		{
+			*running = 0;
+		}
 		if (EVENT.type == SDL_WINDOWEVENT && EVENT.window.event == SDL_WINDOWEVENT_RESIZED)
 		{
 			WIND_WIDTH = EVENT.window.data1;

@@ -11,7 +11,7 @@ void	proto_3d_render(t_game *game, t_raycaster *r)
 	int	start;
 	int	end;
 
-	// r->perp_wall_dist /=2;
+	r->perp_wall_dist /=2;
 	line_height = game->wind_height / r->perp_wall_dist;
 	start = (game->wind_height - line_height) / 2;
 	end = start + line_height;

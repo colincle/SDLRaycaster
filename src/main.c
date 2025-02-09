@@ -38,10 +38,6 @@ void	manage_fps(t_game *game)
 	end_time = SDL_GetTicks();
 	total_frame_time = (end_time - last_time) / 1000.0f;
 	game->fps = 1.0f / total_frame_time;
-	printf("TRUE FPS: %.2f\n", game->fps);
-	printf("goal %f frame %f wait %f\n",
-		frame_time_goal, total_frame_time, wait_time);
-	fflush(stdout);
 	last_time = end_time;
 }
 
@@ -59,6 +55,7 @@ void	game_loop(t_game *game)
 		handle_events(game, &running);
 		update_entities(game);
 		render_next_frame(game);
+		debug_statements(game);
 	}
 }
 

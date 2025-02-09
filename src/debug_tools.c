@@ -5,24 +5,17 @@
 
 #include <SDLRaycaster.h>
 
-void	show_fps(t_game *game)
+void	debug_statements(t_game *game)
 {
-	static int	i;
-	static int	fps;
-
-	if (!SHOW_FPS)
-		return ;
-	fps += FPS;
-	i++;
-	if (i == 100)
-	{
-		fps /= 100;
-		printf("%d fps\n", fps);
-		i = 0;
-		fps = 0;
-	}
+	if (SHOW_FPS)
+		printf("FPS = %f\n", FPS);
+	if (SHOW_DIRECTION)
+		printf("dir x = %f dir y = %f\n", PLAYER_DIR_X, PLAYER_DIR_Y);
+	if (SHOW_POSITION)
+		printf("pos x = %f pos y = %f\n", PLAYER_X, PLAYER_Y);
+	if(SHOW_CAM_PLANE)
+		printf("camera plane x = %f camera plane y = %f\n", PLAYER_CAM_X, PLAYER_CAM_Y);
 }
-
 void	draw_minimap(t_game *game)
 {
 	int	x;

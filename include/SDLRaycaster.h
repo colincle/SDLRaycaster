@@ -13,8 +13,8 @@
 
 //==============================MACROS
 // SETTINGS
-# define FOV			60
-# define FPS_CAP		30
+# define FOV			53
+# define FPS_CAP		60
 # define PLAYER_SPEED	1
 # define ROTATION_SPEED	1
 
@@ -22,7 +22,10 @@
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS 	FALSE
 # define SHOW_MINIMAP 	TRUE
-# define SHOW_FPS		TRUE
+# define SHOW_FPS		FALSE
+# define SHOW_DIRECTION	FALSE
+# define SHOW_POSITION	FALSE
+# define SHOW_CAM_PLANE	FALSE
 # define MINIMAP_BLOCK	25
 
 // MAP CHARACTERS
@@ -48,9 +51,6 @@
 # define S				2
 # define D				3
 # define HOW_MANY_KEYS	4
-
-// FRAMES
-# define FRAME_DELAY    (1000.0f / FPS_CAP)
 
 // OTHERS
 # define TRUE			1
@@ -121,6 +121,7 @@ typedef struct s_game
 	SDL_Renderer		*renderer;
 	int					wind_width;
 	int					wind_height;
+	t_float_xy			***vector_grid;
 }			t_game;
 
 # define FPS			game->fps
@@ -134,6 +135,7 @@ typedef struct s_game
 # define RENDERER		game->renderer
 # define WIND_WIDTH		game->wind_width
 # define WIND_HEIGHT	game->wind_height
+# define VECTOR_GRID	game->vector_grid
 # define PLAYER_X		game->player[(LEVEL)]->x
 # define PLAYER_Y		game->player[(LEVEL)]->y
 # define PLAYER_DIR_X	game->player[(LEVEL)]->dir.x
@@ -154,6 +156,7 @@ void					draw_minimap(t_game *game);
 void					print_all_maps(t_game *game);
 void					print_entities(t_game *game);
 void					update_entities(t_game *game);
+void					debug_statements(t_game *game);
 void					render_next_frame(t_game *game);
 void					set_player_cam(t_game *game, int i);
 void					chapter_1(t_game *game, int *running);

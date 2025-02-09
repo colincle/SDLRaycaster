@@ -14,14 +14,15 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		60
-# define PLAYER_SPEED	1
+# define FPS_CAP		200
+# define PLAYER_SPEED	3
 # define ROTATION_SPEED	1
 
 // DEBUG
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS 	FALSE
-# define SHOW_MINIMAP 	TRUE
+# define SHOW_MINIMAP 	FALSE
+# define SHOW_PATH_FIND FALSE
 # define SHOW_FPS		TRUE
 # define SHOW_DIRECTION	FALSE
 # define SHOW_POSITION	FALSE

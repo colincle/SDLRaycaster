@@ -14,15 +14,15 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		200
+# define FPS_CAP		60
 # define PLAYER_SPEED	3
 # define ROTATION_SPEED	1
 
 // DEBUG
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS 	FALSE
-# define SHOW_MINIMAP 	FALSE
-# define SHOW_PATH_FIND FALSE
+# define SHOW_MINIMAP 	TRUE
+# define SHOW_PATH_FIND TRUE
 # define SHOW_FPS		TRUE
 # define SHOW_DIRECTION	FALSE
 # define SHOW_POSITION	FALSE
@@ -164,14 +164,21 @@ char					**get_map(char *path);
 void					free_all(char **array);
 char					*get_next_line(int fd);
 void					show_fps(t_game *game);
+void					init_maps(t_game *game);
+void					manage_fps(t_game *game);
 SDL_Color				int_to_color(Uint32 color);
 void					draw_minimap(t_game *game);
+void					init_entities(t_game *game);
 void					print_all_maps(t_game *game);
 void					print_entities(t_game *game);
 void					update_entities(t_game *game);
+void					init_vector_grid(t_game *game);
 void					debug_statements(t_game *game);
 void					render_next_frame(t_game *game);
+void					update_vector_grid(t_game *game);
 void					set_player_cam(t_game *game, int i);
+void					set_player_cam(t_game *game, int i);
+void					init_raycaster_steps(t_raycaster *r);
 void					chapter_1(t_game *game, int *running);
 void					chapter_2(t_game *game, int *running);
 void					chapter_3(t_game *game, int *running);
@@ -179,6 +186,8 @@ void					chapter_4(t_game *game, int *running);
 void					chapter_5(t_game *game, int *running);
 char					*strjoin(const char *s1, const char *s2);
 void					handle_events(t_game *game, int *running);
+void					init_raycaster(t_raycaster *r, t_game *game);
+void					perform_raycaster_steps(t_raycaster *r, t_game *game);
 void					draw_cercle(SDL_Renderer *renderer, int centerX, int centerY, int radius);
 void					draw_column(SDL_Renderer *renderer, int x, int yStart, int yEnd, SDL_Color color);
 

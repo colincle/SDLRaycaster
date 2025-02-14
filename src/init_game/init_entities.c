@@ -1,0 +1,135 @@
+/*
+** SDLRaycaster - a from-scratch raycasting engine in C with SDL2
+** Author: Clement Colin
+*/
+
+#include <SDLRaycaster.h>
+
+void	set_player_cam(t_game *game, int i)
+{
+	double	fov_rad;
+	double	h_fov_rad;
+	double	aspect_ratio = (double)WIND_WIDTH / (double)WIND_HEIGHT;
+
+	fov_rad = (FOV * M_PI) / 180.0;
+	h_fov_rad = 2 * atan(tan(fov_rad / 2) * aspect_ratio);
+	PLAYER[i]->cam.x = -PLAYER[i]->dir.y * tan(h_fov_rad / 2);
+	PLAYER[i]->cam.y = PLAYER[i]->dir.x * tan(h_fov_rad / 2);
+}
+
+static void	find_entities(t_game *game, int i)
+{
+	int	x;
+	int	y = 0;
+	int	e = 0;
+
+	game->enemy[i] = NULL;
+	while (MAPS[i][y])
+	{
+		x = 0;
+		while (MAPS[i][y][x])
+		{
+			if (MAPS[i][y][x] == P_NORTH || MAPS[i][y][x] == P_SOUTH ||
+				MAPS[i][y][x] == P_WEST || MAPS[i][y][x] == P_EAST)
+			{
+				game->player[i] = malloc(sizeof(t_entity));
+				if (!game->player[i])
+				{
+					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
+					exit(EXIT_FAILURE);
+				}
+				game->player[i]->x = x + 0.5;
+				game->player[i]->y = y + 0.5;
+				if (MAPS[i][y][x] == P_NORTH)
+				{
+					game->player[i]->dir.x = 0;
+					game->player[i]->dir.y = -1;
+				}
+				if (MAPS[i][y][x] == P_SOUTH)
+				{
+					game->player[i]->dir.x = 0;
+					game->player[i]->dir.y = 1;
+				}
+				if (MAPS[i][y][x] == P_EAST)
+				{
+					game->player[i]->dir.x = 1;
+					game->player[i]->dir.y = 0;
+				}
+				if (MAPS[i][y][x] == P_WEST)
+				{
+					game->player[i]->dir.x = -1;
+					game->player[i]->dir.y = 0;
+				}
+				MAPS[i][y][x] = EMPTY;
+			}
+			if (MAPS[i][y][x] == E_NORTH || MAPS[i][y][x] == E_SOUTH ||
+				MAPS[i][y][x] == E_WEST || MAPS[i][y][x] == E_EAST)
+			{
+				game->enemy[i] = realloc(game->enemy[i], sizeof(t_entity *) * (e + 2));
+				if (!game->enemy[i])
+				{
+					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
+					exit(EXIT_FAILURE);
+				}
+				game->enemy[i][e] = malloc(sizeof(t_entity));
+				if (!game->enemy[i][e])
+				{
+					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
+					exit(EXIT_FAILURE);
+				}
+				game->enemy[i][e]->x = x + 0.5;
+				game->enemy[i][e]->y = y + 0.5;
+				if (MAPS[i][y][x] == E_NORTH)
+				{
+					game->enemy[i][e]->dir.x = 0;
+					game->enemy[i][e]->dir.y = -1;
+				}
+				if (MAPS[i][y][x] == E_SOUTH)
+				{
+					game->enemy[i][e]->dir.x = 0;
+					game->enemy[i][e]->dir.y = 1;
+				}
+				if (MAPS[i][y][x] == E_EAST)
+				{
+					game->enemy[i][e]->dir.x = 1;
+					game->enemy[i][e]->dir.y = 0;
+				}
+				if (MAPS[i][y][x] == E_WEST)
+				{
+					game->enemy[i][e]->dir.x = -1;
+					game->enemy[i][e]->dir.y = 0;
+				}
+				e++;
+				MAPS[i][y][x] = EMPTY;
+			}
+			x++;
+		}
+		y++;
+	}
+	game->enemy[i][e] = NULL;
+}
+
+void	init_entities(t_game *game)
+{
+	int	i = 0;
+
+	game->player = malloc(sizeof(t_entity *) * NUMBER_OF_MAPS);
+	if (!game->player)
+	{
+		fprintf(stderr, "ERROR: memory allocation failed in init_entities");
+		exit(EXIT_FAILURE);
+	}
+	game->enemy = malloc(sizeof(t_entity **) * NUMBER_OF_MAPS);
+	if (!game->enemy)
+	{
+		fprintf(stderr, "ERROR: memory allocation failed in init_entities");
+		exit(EXIT_FAILURE);
+	}
+	while (i < NUMBER_OF_MAPS)
+	{
+		game->enemy[i] = NULL;
+		find_entities(game, i);
+		set_player_cam(game, i);
+		i++;
+	}
+}

@@ -23,9 +23,10 @@ static void	copy_old_map(char **new_map, char **old_map)
 	int		i;
 
 	i = 0;
-	while (old_map[i])
+	while (old_map && old_map[i])
 	{
 		new_map[i] = strdup(old_map[i]);
+		free(old_map[i]);
 		i++;
 	}
 	new_map[i] = NULL;
@@ -65,15 +66,22 @@ char	**get_map(char *path)
 		perror("Error opening map file");
 		return (NULL);
 	}
-	map = malloc(sizeof(char *) * (map_capacity + 1));
+	map = calloc((map_capacity + 1), sizeof(char *));
 	if (!map)
 	{
 		close(fd);
-		return (NULL);
+		fprintf(stderr, "ERROR: memory allocation failed in get_map");
+		exit(EXIT_FAILURE);
 	}
 	line = get_next_line(fd);
 	while (line)
 	{
+		if (!(*line))
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
 		if (line[strlen(line) - 1] == '\n')
 			line[strlen(line) - 1] = '\0';
 		if (map_size >= map_capacity)

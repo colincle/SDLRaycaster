@@ -1,6 +1,6 @@
 TARGET = SDLRaycaster
 CC = gcc
-CFLAGS =	-Wall -Wextra -Werror -Wno-deprecated-declarations -arch x86_64 #-fsanitize=address -Ofast -march=native -flto -ffast-math \
+CFLAGS =	-Wall -Wextra -Wno-deprecated-declarations -arch x86_64 -Ofast -march=native -flto -ffast-math \
 			-funroll-loops -fno-exceptions -fomit-frame-pointer
 			
 LDFLAGS = -arch x86_64 -L$(LIBS)/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -flto \

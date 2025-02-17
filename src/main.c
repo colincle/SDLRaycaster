@@ -22,12 +22,12 @@ static void	game_loop(t_game *game)
 	LEVEL = 0;
 	while (running)
 	{
-		manage_fps(game);
 		chapter[LEVEL](game, &running);
 		handle_events(game, &running);
 		update_entities(game);
 		render_next_frame(game);
 		debug_statements(game);
+		manage_fps(game);
 	}
 }
 

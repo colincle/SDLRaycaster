@@ -14,16 +14,17 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		100
+# define FPS_CAP		80
 # define PLAYER_SPEED	3
-# define MOUSE_SENSITIVITY	0.02
+# define MOUSE_SENSIT	0.01
+# define JOY_SENSIT		2
 
 // DEBUG
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS 	FALSE
 # define SHOW_MINIMAP 	TRUE
 # define SHOW_PATH_FIND FALSE
-# define SHOW_FPS		TRUE
+# define SHOW_FPS		FALSE
 # define SHOW_DIRECTION	FALSE
 # define SHOW_POSITION	FALSE
 # define SHOW_CAM_PLANE	FALSE
@@ -121,11 +122,21 @@ typedef struct s_raycaster
 	float				perp_wall_dist;
 }						t_raycaster;
 
+typedef struct s_input
+{
+	int					*keys;
+	int					mouse_x_rel;
+	float				joystick_velocity_x;
+	float				joystick_velocity_y;
+	float				joystick_rotation;
+}						t_input;
+
+
 typedef struct s_game
 {
 	float				fps;
-	int					*keys;
 	SDL_Event			event;
+	t_input				input;
 	int					level;
 	SDL_Window			*window;
 	char				***maps;
@@ -135,26 +146,30 @@ typedef struct s_game
 	int					wind_width;
 	int					wind_height;
 	t_float_xy			***vector_grid;
-}			t_game;
+}						t_game;
 
 # define FPS			game->fps
 # define MAPS			game->maps
-# define KEYS			game->keys
 # define LEVEL			game->level
 # define EVENT			game->event
 # define ENEMY			game->ENEMY
 # define PLAYER			game->player
 # define WINDOW			game->window
 # define RENDERER		game->renderer
+# define KEYS			game->input.keys
 # define WIND_WIDTH		game->wind_width
 # define WIND_HEIGHT	game->wind_height
 # define VECTOR_GRID	game->vector_grid
+# define MOUSE_X		game->input.mouse_x_rel
 # define PLAYER_X		game->player[(LEVEL)]->x
 # define PLAYER_Y		game->player[(LEVEL)]->y
 # define PLAYER_DIR_X	game->player[(LEVEL)]->dir.x
 # define PLAYER_DIR_Y	game->player[(LEVEL)]->dir.y
 # define PLAYER_CAM_X	game->player[(LEVEL)]->cam.x
 # define PLAYER_CAM_Y	game->player[(LEVEL)]->cam.y
+# define JOYSTICK_ROT	game->input.joystick_rotation
+# define JOYSTICK_X		game->input.joystick_velocity_x
+# define JOYSTICK_Y		game->input.joystick_velocity_y
 
 //==============================FUNCTIONS
 char					*get_path(int i);

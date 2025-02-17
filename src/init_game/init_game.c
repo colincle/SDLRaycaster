@@ -47,6 +47,34 @@ static void	graphics_init(t_game *game)
 	SDL_GetWindowSize(WINDOW, &WIND_WIDTH, &WIND_HEIGHT);
 }
 
+void	controller_init(t_game *game)
+{
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0) 
+	{
+		printf("SDL could not initialize! Error: %s\n", SDL_GetError());
+		SDL_Quit();
+		cleanup(game);
+		exit(EXIT_FAILURE);
+	}
+	SDL_GameController *controller = NULL;
+	if (SDL_NumJoysticks() > 0 && SDL_IsGameController(0)) 
+	{
+	    controller = SDL_GameControllerOpen(0);
+	    if (!controller) 
+		{
+	        printf("Failed to open controller: %s\n", SDL_GetError());
+	    }
+		else 
+		{
+	        printf("Controller connected: %s\n", SDL_GameControllerName(controller));
+	    }
+	}
+	else 
+	{
+	    printf("No compatible controller found.\n");
+	}
+}
+
 t_game	*game_init(void)
 {
 	t_game	*game;
@@ -57,6 +85,7 @@ t_game	*game_init(void)
 		fprintf(stderr, "ERROR: memory allocation failed in game_init");
 		exit(EXIT_FAILURE);
 	}
+	controller_init(game);
 	graphics_init(game);
 	game_struct_init(game);
 	SDL_SetRelativeMouseMode(SDL_TRUE);

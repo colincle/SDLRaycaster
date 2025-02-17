@@ -33,10 +33,18 @@ void	handle_events(t_game *game, int *running)
 {
 	while (SDL_PollEvent(&EVENT))
 	{
-		printf("event%c------------------------%c", 10, 10); fflush(stdout); //debug
 		if (EVENT.type == SDL_MOUSEMOTION)
 		{
-			rotate_player(game, EVENT.motion.xrel);
+			MOUSE_X = EVENT.motion.xrel;
+		}
+		if (EVENT.type == SDL_CONTROLLERAXISMOTION)
+		{
+			if (EVENT.caxis.axis == 0)
+				JOYSTICK_X = EVENT.caxis.value / 32768.0f;
+			if (EVENT.caxis.axis == 1)
+				JOYSTICK_Y = -EVENT.caxis.value / 32768.0f;
+			if (EVENT.caxis.axis == 2)
+				JOYSTICK_ROT = -EVENT.caxis.value / 32768.0f;
 		}
 		if (EVENT.type == SDL_KEYDOWN)
 		{

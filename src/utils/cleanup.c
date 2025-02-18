@@ -92,8 +92,14 @@ static void	free_vector_grid(t_game *game)
 
 void	cleanup(t_game *game)
 {
+	if (game->textures.wall.texture)
+	{
+		SDL_DestroyTexture(game->textures.wall.texture);
+		game->textures.wall.texture = NULL;
+	}	
 	free_all_maps(game);
 	free_entities(game);
 	free_vector_grid(game);
 	free(game);
+	quit_game(game);
 }

@@ -3,10 +3,18 @@ CC = gcc
 CFLAGS =	-Wall -Wextra -Wno-deprecated-declarations -arch x86_64 -Ofast -march=native -flto -ffast-math \
 			-funroll-loops -fno-exceptions -fomit-frame-pointer
 			
-LDFLAGS = -arch x86_64 -L$(LIBS)/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -flto \
-          -framework Cocoa -framework IOKit -framework CoreVideo -framework CoreFoundation \
-          -framework AudioToolbox -framework ForceFeedback -framework GameController \
-          -framework Metal -framework CoreHaptics -framework CoreAudio -framework Carbon
+LDFLAGS = -arch x86_64 -L$(LIBS)/lib \
+          -force_load $(LIBS)/lib/libSDL2.a \
+          -force_load $(LIBS)/lib/libSDL2_image.a \
+          -force_load $(LIBS)/lib/libSDL2_ttf.a \
+          -force_load $(LIBS)/lib/libSDL2_mixer.a \
+          -lpng \
+          -framework Cocoa -framework IOKit -framework CoreVideo \
+          -framework CoreFoundation -framework AudioToolbox -framework ForceFeedback \
+          -framework GameController -framework Metal -framework CoreHaptics \
+          -framework CoreAudio -framework Carbon
+
+
 
 
 LIBS = libs

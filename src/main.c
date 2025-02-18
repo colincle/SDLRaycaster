@@ -5,12 +5,12 @@
 
 #include <SDLRaycaster.h>
 
-static void	quit_game(t_game *game)
+void	quit_game(t_game *game)
 {
 	SDL_DestroyWindow(WINDOW);
 	SDL_DestroyRenderer(RENDERER);
 	SDL_Quit();
-	cleanup(game);
+	exit(EXIT_SUCCESS);
 }
 
 static void	game_loop(t_game *game)
@@ -37,6 +37,6 @@ int	main(void)
 
 	game = game_init();
 	game_loop(game);
-	quit_game(game);
+	cleanup(game);
 	return (0);
 }

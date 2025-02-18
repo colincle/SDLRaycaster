@@ -14,7 +14,7 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		80
+# define FPS_CAP		61
 # define PLAYER_SPEED	3
 # define MOUSE_SENSIT	0.01
 # define JOY_SENSIT		2
@@ -24,7 +24,7 @@
 # define PRINT_MAPS 	FALSE
 # define SHOW_MINIMAP 	TRUE
 # define SHOW_PATH_FIND FALSE
-# define SHOW_FPS		FALSE
+# define SHOW_FPS		TRUE
 # define SHOW_DIRECTION	FALSE
 # define SHOW_POSITION	FALSE
 # define SHOW_CAM_PLANE	FALSE
@@ -131,6 +131,18 @@ typedef struct s_input
 	float				joystick_rotation;
 }						t_input;
 
+typedef struct s_texture_info
+{
+	SDL_Texture			*texture;
+	int					height;
+	int					width;
+}						t_texture_info;
+
+typedef struct s_textures
+{
+
+	t_texture_info		wall;
+}						t_textures;
 
 typedef struct s_game
 {
@@ -142,6 +154,7 @@ typedef struct s_game
 	char				***maps;
 	t_entity			**player;
 	t_entity			***enemy;
+	t_textures			textures;
 	SDL_Renderer		*renderer;
 	int					wind_width;
 	int					wind_height;
@@ -179,6 +192,7 @@ char					**get_map(char *path);
 void					free_all(char **array);
 char					*get_next_line(int fd);
 void					show_fps(t_game *game);
+void					quit_game(t_game *game);
 void					init_maps(t_game *game);
 void					manage_fps(t_game *game);
 SDL_Color				int_to_color(Uint32 color);

@@ -5,30 +5,28 @@
 
 #include <SDLRaycaster.h>
 
-void	manage_fps(t_game *game)
+void manage_fps(t_game *game)
 {
-	static Uint32	last_time = 0;
-	Uint32			start_time;
-	Uint32			end_time;
-	float			elapsed_time;
-	float			frame_time_goal;
-	float			wait_time;
-	float			total_frame_time;
+    static Uint64 last_time = 0;
+    Uint64 start_time, end_time;
+    double elapsed_time, frame_time_goal, wait_time, total_frame_time;
+    double frequency = (double)SDL_GetPerformanceFrequency();
 
-	start_time = SDL_GetTicks();
-	if (last_time == 0)
-		last_time = start_time;
-	elapsed_time = (start_time - last_time) / 1000.0f;
-	if (elapsed_time > 0.0001f)
-		game->fps = 1.0f / elapsed_time;
-	else
-		game->fps = (float)FPS_CAP;
-	frame_time_goal = 1.0f / (float)FPS_CAP;
-	wait_time = frame_time_goal - elapsed_time;
-	if (wait_time > 0)
-		SDL_Delay((Uint32)(wait_time * 1000));
-	end_time = SDL_GetTicks();
-	total_frame_time = (end_time - last_time) / 1000.0f;
-	game->fps = 1.0f / total_frame_time;
-	last_time = end_time;
+    start_time = SDL_GetPerformanceCounter();
+    if (last_time == 0)
+        last_time = start_time;
+
+    elapsed_time = (double)(start_time - last_time) / frequency;
+    game->fps = (elapsed_time > 0.0001) ? (1.0 / elapsed_time) : (double)FPS_CAP;
+
+    frame_time_goal = 1.0 / (double)FPS_CAP;
+    wait_time = frame_time_goal - elapsed_time;
+
+    while (((double)(SDL_GetPerformanceCounter() - start_time) / frequency) < wait_time); // Active waiting to ensure more precise timing
+
+    end_time = SDL_GetPerformanceCounter();
+    total_frame_time = (double)(end_time - last_time) / frequency;
+    game->fps = 1.0 / total_frame_time;
+    last_time = end_time;
 }
+

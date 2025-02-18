@@ -5,112 +5,112 @@
 
 #include <SDLRaycaster.h>
 
-static void	analyse_ray_data(t_game *game)
+static void	analyse_ray_data(t_raycaster *r)
 {
-	if (RAY.side)
+	if (r->side)
 	{
-		if (RAY.ray_dir_y > 0)
+		if (r->ray_dir_y > 0)
 		{
-			RAY.wall_dir = SOUTH;
+			r->wall_dir = SOUTH;
 			return ;
 		}
-		RAY.wall_dir = NORTH;
+		r->wall_dir = NORTH;
 		return ;
 	}
-	if (RAY.ray_dir_x > 0)
+	if (r->ray_dir_x > 0)
 	{
-		RAY.wall_dir = EAST;
+		r->wall_dir = EAST;
 		return ;
 	}
-	RAY.wall_dir = WEST;
+	r->wall_dir = WEST;
 }
 
-static void	ray_has_hit_wall(t_game *game)
+static void	ray_has_hit_wall(t_raycaster *r)
 {
 	double	inv_ray_dir_x;
 	double	inv_ray_dir_y;
 	double	perp_dist;
 
-	inv_ray_dir_x = 1.0f / RAY.ray_dir_x;
-	inv_ray_dir_y = 1.0f / RAY.ray_dir_y;
-	if (RAY.side == 0)
-		RAY.perp_wall_dist = (RAY.map_x - RAY.pos_x + (1 - RAY.step_x) * 0.5f) * inv_ray_dir_x;
+	inv_ray_dir_x = 1.0f / r->ray_dir_x;
+	inv_ray_dir_y = 1.0f / r->ray_dir_y;
+	if (r->side == 0)
+		r->perp_wall_dist = (r->map_x - r->pos_x + (1 - r->step_x) * 0.5f) * inv_ray_dir_x;
 	else
-		RAY.perp_wall_dist = (RAY.map_y - RAY.pos_y + (1 - RAY.step_y) * 0.5f) * inv_ray_dir_y;
-	perp_dist = RAY.perp_wall_dist;
-	RAY.wall_hit_x = RAY.pos_x + RAY.ray_dir_x * perp_dist;
-	RAY.wall_hit_y = RAY.pos_y + RAY.ray_dir_y * perp_dist;
+		r->perp_wall_dist = (r->map_y - r->pos_y + (1 - r->step_y) * 0.5f) * inv_ray_dir_y;
+	perp_dist = r->perp_wall_dist;
+	r->wall_hit_x = r->pos_x + r->ray_dir_x * perp_dist;
+	r->wall_hit_y = r->pos_y + r->ray_dir_y * perp_dist;
 }
 
-void	perform_raycaster_steps(t_game *game)
+void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 {
 	char	**map;
 
 	map = MAPS[LEVEL];
-	while (map[RAY.map_y][RAY.map_x] != WALL)
+	while (map[r->map_y][r->map_x] != WALL)
 	{
-		// if (map[RAY.map_y][RAY.map_x] == DOOR_CLOSED)
+		// if (map[r->map_y][r->map_x] == DOOR_CLOSED)
 		// {
 		// 	if (ray_has_hit_door(r, game))
 		// 	{
-		// 		RAY.wall_dir = DOOR;
+		// 		r->wall_dir = DOOR;
 		// 		return ;
 		// 	}
 		// }
-		if (RAY.side_dist_x < RAY.side_dist_y)
+		if (r->side_dist_x < r->side_dist_y)
 		{
-			RAY.side_dist_x += RAY.delta_dist_x;
-			RAY.map_x += RAY.step_x;
-			RAY.side = 0;
+			r->side_dist_x += r->delta_dist_x;
+			r->map_x += r->step_x;
+			r->side = 0;
 		}
 		else
 		{
-			RAY.side_dist_y += RAY.delta_dist_y;
-			RAY.map_y += RAY.step_y;
-			RAY.side = 1;
+			r->side_dist_y += r->delta_dist_y;
+			r->map_y += r->step_y;
+			r->side = 1;
 		}
 	}
-	ray_has_hit_wall(game);
-	analyse_ray_data(game);
+	ray_has_hit_wall(r);
+	analyse_ray_data(r);
 }
 
-void	init_raycaster_steps(t_game *game)
+void	init_raycaster_steps(t_raycaster *r)
 {
-	if (RAY.ray_dir_x < 0)
+	if (r->ray_dir_x < 0)
 	{
-		RAY.step_x = -1;
-		RAY.side_dist_x = (RAY.pos_x - RAY.map_x) * RAY.delta_dist_x;
+		r->step_x = -1;
+		r->side_dist_x = (r->pos_x - r->map_x) * r->delta_dist_x;
 	}
 	else
 	{
-		RAY.step_x = 1;
-		RAY.side_dist_x = (RAY.map_x + 1.0 - RAY.pos_x) * RAY.delta_dist_x;
+		r->step_x = 1;
+		r->side_dist_x = (r->map_x + 1.0 - r->pos_x) * r->delta_dist_x;
 	}
-	if (RAY.ray_dir_y < 0)
+	if (r->ray_dir_y < 0)
 	{
-		RAY.step_y = -1;
-		RAY.side_dist_y = (RAY.pos_y - RAY.map_y) * RAY.delta_dist_y;
+		r->step_y = -1;
+		r->side_dist_y = (r->pos_y - r->map_y) * r->delta_dist_y;
 		return ;
 	}
-	RAY.step_y = 1;
-	RAY.side_dist_y = (RAY.map_y + 1.0 - RAY.pos_y) * RAY.delta_dist_y;
+	r->step_y = 1;
+	r->side_dist_y = (r->map_y + 1.0 - r->pos_y) * r->delta_dist_y;
 }
 
-void	init_raycaster(t_game *game)
+void	init_raycaster(t_raycaster *r, t_game *game)
 {
-	RAY.pos_x = PLAYER_X;
-	RAY.pos_y = PLAYER_Y;
-	RAY.map_x = (int)RAY.pos_x;
-	RAY.map_y = (int)RAY.pos_y;
-	RAY.cam_x = 2.0f * (float)RAY.x / (float)WIND_WIDTH - 1.0f;
-	RAY.ray_dir_x = PLAYER_DIR_X + PLAYER_CAM_X * RAY.cam_x;
-	RAY.ray_dir_y = PLAYER_DIR_Y + PLAYER_CAM_Y * RAY.cam_x;
-	if (RAY.ray_dir_x == 0.0f)
-		RAY.delta_dist_x = 1e10f;
+	r->pos_x = PLAYER_X;
+	r->pos_y = PLAYER_Y;
+	r->map_x = (int)r->pos_x;
+	r->map_y = (int)r->pos_y;
+	r->cam_x = 2.0f * (float)r->x / (float)WIND_WIDTH - 1.0f;
+	r->ray_dir_x = PLAYER_DIR_X + PLAYER_CAM_X * r->cam_x;
+	r->ray_dir_y = PLAYER_DIR_Y + PLAYER_CAM_Y * r->cam_x;
+	if (r->ray_dir_x == 0.0f)
+		r->delta_dist_x = 1e10f;
 	else
-		RAY.delta_dist_x = fabsf(1.0f / RAY.ray_dir_x);
-	if (RAY.ray_dir_y == 0.0f)
-		RAY.delta_dist_y = 1e10f;
+		r->delta_dist_x = fabsf(1.0f / r->ray_dir_x);
+	if (r->ray_dir_y == 0.0f)
+		r->delta_dist_y = 1e10f;
 	else
-		RAY.delta_dist_y = fabsf(1.0f / RAY.ray_dir_y);
+		r->delta_dist_y = fabsf(1.0f / r->ray_dir_y);
 }

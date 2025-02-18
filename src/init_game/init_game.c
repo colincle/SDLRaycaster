@@ -33,8 +33,10 @@ static void	graphics_init(t_game *game)
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
 		cleanup(game);
 	}
-	RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	// RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED);
+	if (VSYNC)
+		RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	else
+		RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED);
 	if (!RENDERER)
 	{
 		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
@@ -69,27 +71,65 @@ void	controller_init(t_game *game)
 	}
 }
 
+void load_texture(t_game *game, const char *path, t_texture *dest)
+{
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+	{
+		printf("IMG_Init Error: %s\n", IMG_GetError());
+		cleanup(game);
+	}
+
+	SDL_Surface *surface = IMG_Load(path);
+	if (!surface)
+	{
+		printf("IMG_Load Error: %s\n", IMG_GetError());
+		cleanup(game);
+	}
+
+	dest->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+	if (!dest->texture)
+	{
+		printf("SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+		SDL_FreeSurface(surface);
+		cleanup(game);
+	}
+
+	// **Allocate memory and copy pixel data before freeing surface**
+	dest->width = surface->w;
+	dest->height = surface->h;
+	dest->pixels = (Uint32 *)malloc(dest->width * dest->height * sizeof(Uint32));
+	if (!dest->pixels)
+	{
+		printf("Memory allocation failed for texture pixels\n");
+		SDL_FreeSurface(surface);
+		cleanup(game);
+	}
+
+	memcpy(dest->pixels, surface->pixels, dest->width * dest->height * sizeof(Uint32));
+
+	SDL_FreeSurface(surface);
+	SDL_QueryTexture(dest->texture, NULL, NULL, &dest->width, &dest->height);
+}
+
+
 void load_textures(t_game *game)
 {
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-    {
-        printf("IMG_Init Error: %s\n", IMG_GetError());
-        cleanup(game);
-    }
-	SDL_Surface *surface = IMG_Load("./assets/textures/png/east.png");
-    if (!surface)
-    {
-        printf("IMG_Load Error: %s\n", IMG_GetError());
-        cleanup(game);
-    }
-    game->textures.wall.texture = SDL_CreateTextureFromSurface(RENDERER, surface);
-    SDL_FreeSurface(surface);
-    if (!game->textures.wall.texture)
-    {
-        printf("SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+	game->textures.screen_texture = SDL_CreateTexture
+	(
+		game->renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		WIND_WIDTH,
+		WIND_HEIGHT
+	);
+	if (!game->textures.screen_texture)
+	{
+		printf("SDL_CreateTexture Error: %s\n", SDL_GetError());
 		cleanup(game);
-    }
-	SDL_QueryTexture(game->textures.wall.texture, NULL, NULL, &game->textures.wall.width, &game->textures.wall.height);
+	}
+	load_texture(game, "./assets/textures/png/wall.png", &game->textures.wall);
+	load_texture(game, "./assets/textures/png/ceiling.png", &game->textures.ceiling);
+	load_texture(game, "./assets/textures/png/floor.png", &game->textures.floor);
 }
 
 t_game	*game_init(void)

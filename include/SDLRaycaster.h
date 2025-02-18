@@ -14,10 +14,12 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		61
+# define FPS_CAP		60
 # define PLAYER_SPEED	3
 # define MOUSE_SENSIT	0.01
 # define JOY_SENSIT		2
+# define PIXEL_BLOCK	5
+# define VSYNC			TRUE
 
 // DEBUG
 # define PRINT_ENTITIES FALSE
@@ -120,6 +122,16 @@ typedef struct s_raycaster
 	float				delta_dist_x;
 	float				delta_dist_y;
 	float				perp_wall_dist;
+	float				ray_dir_x_0;
+	float				ray_dir_y_0;
+	float				ray_dir_x_1;
+	float				ray_dir_y_1;
+	float				pos_z;
+	float				row_distance;
+	float				floor_step_x;
+	float				floor_step_y;
+	float				floor_x;
+	float				floor_y;
 }						t_raycaster;
 
 typedef struct s_input
@@ -131,17 +143,20 @@ typedef struct s_input
 	float				joystick_rotation;
 }						t_input;
 
-typedef struct s_texture_info
+typedef struct s_texture
 {
 	SDL_Texture			*texture;
-	int					height;
+	Uint32				*pixels;
 	int					width;
-}						t_texture_info;
+	int					height;
+}						t_texture;
 
 typedef struct s_textures
 {
-
-	t_texture_info		wall;
+	SDL_Texture			*screen_texture;
+	t_texture			wall;
+	t_texture			ceiling;
+	t_texture			floor;
 }						t_textures;
 
 typedef struct s_game
@@ -155,14 +170,12 @@ typedef struct s_game
 	t_entity			**player;
 	t_entity			***enemy;
 	t_textures			textures;
-	t_raycaster			raycaster;
 	SDL_Renderer		*renderer;
 	int					wind_width;
 	int					wind_height;
 	t_float_xy			***vector_grid;
 }						t_game;
 
-# define RAY			game->raycaster
 # define FPS			game->fps
 # define MAPS			game->maps
 # define LEVEL			game->level
@@ -210,7 +223,7 @@ void					update_vector_grid(t_game *game);
 void					rotate_player(t_game *game, int x);
 void					set_player_cam(t_game *game, int i);
 void					set_player_cam(t_game *game, int i);
-void					init_raycaster_steps(t_game *game);
+void					init_raycaster_steps(t_raycaster *r);
 void					chapter_1(t_game *game, int *running);
 void					chapter_2(t_game *game, int *running);
 void					chapter_3(t_game *game, int *running);
@@ -218,8 +231,8 @@ void					chapter_4(t_game *game, int *running);
 void					chapter_5(t_game *game, int *running);
 char					*strjoin(const char *s1, const char *s2);
 void					handle_events(t_game *game, int *running);
-void					init_raycaster(t_game *game);
-void					perform_raycaster_steps(t_game *game);
+void					init_raycaster(t_raycaster *r, t_game *game);
+void					perform_raycaster_steps(t_raycaster *r, t_game *game);
 void					draw_cercle(SDL_Renderer *renderer, int centerX, int centerY, int radius);
 void					draw_column(SDL_Renderer *renderer, int x, int yStart, int yEnd, SDL_Color color);
 

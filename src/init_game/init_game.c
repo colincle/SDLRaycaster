@@ -19,6 +19,7 @@ static void	game_struct_init(t_game *game)
 		exit(EXIT_FAILURE);
 	}
 	PLAYER_SPEED = DEFAULT_SPEED;
+	CAM_SHIFT = 0;
 }
 
 static void	graphics_init(t_game *game)
@@ -48,45 +49,47 @@ static void	graphics_init(t_game *game)
 
 void	controller_init(t_game *game)
 {
-	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0) 
+	SDL_GameController	*controller;
+
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0)
 	{
 		printf("SDL could not initialize! Error: %s\n", SDL_GetError());
 		cleanup(game);
 	}
-	SDL_GameController *controller = NULL;
-	if (SDL_NumJoysticks() > 0 && SDL_IsGameController(0)) 
+	controller = NULL;
+	if (SDL_NumJoysticks() > 0 && SDL_IsGameController(0))
 	{
-	    controller = SDL_GameControllerOpen(0);
-	    if (!controller) 
+		controller = SDL_GameControllerOpen(0);
+		if (!controller)
 		{
-	        printf("Failed to open controller: %s\n", SDL_GetError());
-	    }
-		else 
+			printf("Failed to open controller: %s\n", SDL_GetError());
+		}
+		else
 		{
-	        printf("Controller connected: %s\n", SDL_GameControllerName(controller));
-	    }
+			printf("Controller connected: %s\n", SDL_GameControllerName(controller));
+		}
 	}
-	else 
+	else
 	{
-	    printf("No compatible controller found.\n");
+		printf("No compatible controller found.\n");
 	}
 }
 
-void load_texture(t_game *game, const char *path, t_texture *dest)
+void	load_texture(t_game *game, const char *path, t_texture *dest)
 {
+	SDL_Surface	*surface;
+
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
 		printf("IMG_Init Error: %s\n", IMG_GetError());
 		cleanup(game);
 	}
-
-	SDL_Surface *surface = IMG_Load(path);
+	surface = IMG_Load(path);
 	if (!surface)
 	{
 		printf("IMG_Load Error: %s\n", IMG_GetError());
 		cleanup(game);
 	}
-
 	dest->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
 	if (!dest->texture)
 	{
@@ -94,8 +97,6 @@ void load_texture(t_game *game, const char *path, t_texture *dest)
 		SDL_FreeSurface(surface);
 		cleanup(game);
 	}
-
-	// **Allocate memory and copy pixel data before freeing surface**
 	dest->width = surface->w;
 	dest->height = surface->h;
 	dest->pixels = (Uint32 *)malloc(dest->width * dest->height * sizeof(Uint32));
@@ -105,24 +106,21 @@ void load_texture(t_game *game, const char *path, t_texture *dest)
 		SDL_FreeSurface(surface);
 		cleanup(game);
 	}
-
 	memcpy(dest->pixels, surface->pixels, dest->width * dest->height * sizeof(Uint32));
-
 	SDL_FreeSurface(surface);
 	SDL_QueryTexture(dest->texture, NULL, NULL, &dest->width, &dest->height);
 }
 
-
-void load_textures(t_game *game)
+void	load_textures(t_game *game)
 {
 	game->textures.screen_texture = SDL_CreateTexture
-	(
-		game->renderer,
-		SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING,
-		WIND_WIDTH,
-		WIND_HEIGHT
-	);
+		(
+			game->renderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_STREAMING,
+			WIND_WIDTH,
+			WIND_HEIGHT
+			);
 	if (!game->textures.screen_texture)
 	{
 		printf("SDL_CreateTexture Error: %s\n", SDL_GetError());
@@ -148,6 +146,6 @@ t_game	*game_init(void)
 	load_textures(game);
 	game_struct_init(game);
 	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "0");
-	SDL_SetRelativeMouseMode(SDL_TRUE);	
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 	return (game);
 }

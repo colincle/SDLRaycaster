@@ -22,6 +22,7 @@
 # define VSYNC			TRUE
 
 // DEBUG
+# define START_LEVEL	0
 # define PRINT_ENTITIES FALSE
 # define PRINT_MAPS 	FALSE
 # define SHOW_MINIMAP 	FALSE
@@ -48,6 +49,7 @@
 # define DOOR_OPENED	'U'
 # define DOOR_CLOSING	'd'
 # define DOOR_OPENING	'u'
+# define TRIGGER		'T'
 
 // KEYS
 # define W				0
@@ -55,7 +57,8 @@
 # define S				2
 # define D				3
 # define SHIFT			4
-# define HOW_MANY_KEYS	5
+# define C				5
+# define HOW_MANY_KEYS	6
 
 // OTHERS
 # define TRUE			1
@@ -123,25 +126,17 @@ typedef struct s_raycaster
 	float				delta_dist_x;
 	float				delta_dist_y;
 	float				perp_wall_dist;
-	float				ray_dir_x_0;
-	float				ray_dir_y_0;
-	float				ray_dir_x_1;
-	float				ray_dir_y_1;
-	float				pos_z;
-	float				row_distance;
-	float				floor_step_x;
-	float				floor_step_y;
-	float				floor_x;
-	float				floor_y;
 }						t_raycaster;
 
 typedef struct s_input
 {
 	int					*keys;
 	int					mouse_x_rel;
+	int					mouse_y_rel;
 	float				joystick_velocity_x;
 	float				joystick_velocity_y;
-	float				joystick_rotation;
+	float				joystick_rotation_x;
+	float				joystick_rotation_y;
 }						t_input;
 
 typedef struct s_texture
@@ -176,11 +171,13 @@ typedef struct s_game
 	int					wind_width;
 	int					wind_height;
 	t_float_xy			***vector_grid;
+	int					camera_shift;
 }						t_game;
 
 # define FPS			game->fps
 # define MAPS			game->maps
 # define LEVEL			game->level
+# define CAM_SHIFT		game->camera_shift
 # define EVENT			game->event
 # define ENEMY			game->ENEMY
 # define PLAYER			game->player
@@ -192,13 +189,15 @@ typedef struct s_game
 # define PLAYER_SPEED	game->speed
 # define VECTOR_GRID	game->vector_grid
 # define MOUSE_X		game->input.mouse_x_rel
+# define MOUSE_Y		game->input.mouse_y_rel
 # define PLAYER_X		game->player[(LEVEL)]->x
 # define PLAYER_Y		game->player[(LEVEL)]->y
 # define PLAYER_DIR_X	game->player[(LEVEL)]->dir.x
 # define PLAYER_DIR_Y	game->player[(LEVEL)]->dir.y
 # define PLAYER_CAM_X	game->player[(LEVEL)]->cam.x
 # define PLAYER_CAM_Y	game->player[(LEVEL)]->cam.y
-# define JOYSTICK_ROT	game->input.joystick_rotation
+# define JOYSTICK_ROT_X	game->input.joystick_rotation_x
+# define JOYSTICK_ROT_Y	game->input.joystick_rotation_y
 # define JOYSTICK_X		game->input.joystick_velocity_x
 # define JOYSTICK_Y		game->input.joystick_velocity_y
 
@@ -225,11 +224,14 @@ void					render_next_frame(t_game *game);
 void					update_vector_grid(t_game *game);
 void					rotate_player(t_game *game, int x);
 void					set_player_cam(t_game *game, int i);
+void					manage_controller(t_game *game);
 void					set_player_cam(t_game *game, int i);
 void					init_raycaster_steps(t_raycaster *r);
 void					chapter_1(t_game *game, int *running);
 void					chapter_2(t_game *game, int *running);
 void					chapter_3(t_game *game, int *running);
+void					keydown(t_game *game, SDL_KeyCode code);
+void					keyup(t_game *game, SDL_KeyCode code);
 void					chapter_4(t_game *game, int *running);
 void					chapter_5(t_game *game, int *running);
 char					*strjoin(const char *s1, const char *s2);

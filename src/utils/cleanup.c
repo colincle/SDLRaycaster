@@ -90,7 +90,7 @@ static void	free_vector_grid(t_game *game)
 	game->vector_grid = NULL;
 }
 
-void cleanup_textures(t_textures *textures)
+void	cleanup_textures(t_textures *textures)
 {
 	if (textures->wall.texture)
 	{

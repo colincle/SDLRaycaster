@@ -60,6 +60,12 @@
 # define C				5
 # define HOW_MANY_KEYS	6
 
+// PLAYER MOVEMENT
+
+# define STILL			0
+# define RUNNING		1
+# define WALKING		2
+
 // OTHERS
 # define TRUE			1
 # define FALSE			0
@@ -103,6 +109,13 @@ typedef struct s_frames
 	int					frame_time;
 	Uint32				frame_start;
 }						t_frames;
+
+typedef struct s_sounds
+{
+	Mix_Music			*ambient;
+	Mix_Chunk			*running;
+	Mix_Chunk			*walking;
+}						t_sounds;
 
 typedef struct s_raycaster
 {
@@ -166,11 +179,13 @@ typedef struct s_game
 	t_entity			**player;
 	t_entity			***enemy;
 	int					speed;
+	int					moving;
 	t_textures			textures;
 	SDL_Renderer		*renderer;
 	int					wind_width;
 	int					wind_height;
 	t_float_xy			***vector_grid;
+	t_sounds			sounds;
 	int					camera_shift;
 }						t_game;
 
@@ -180,6 +195,8 @@ typedef struct s_game
 # define CAM_SHIFT		game->camera_shift
 # define EVENT			game->event
 # define ENEMY			game->ENEMY
+# define MOVING			game->moving
+# define SOUNDS			game->sounds
 # define PLAYER			game->player
 # define WINDOW			game->window
 # define RENDERER		game->renderer

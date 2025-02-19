@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS =	-Wall -Wextra -Wno-deprecated-declarations -arch x86_64 -Ofast -march=native -flto -ffast-math \
 			-funroll-loops -fno-exceptions -fomit-frame-pointer
 			
-LDFLAGS = -arch x86_64 -L$(LIBS)/lib -L/usr/local/lib -lpthread  \
+LDFLAGS = -arch x86_64 -L$(LIBS)/lib -L/usr/local/lib -lpthread \
           -force_load $(LIBS)/lib/libSDL2.a \
           -force_load $(LIBS)/lib/libSDL2_image.a \
           -force_load $(LIBS)/lib/libSDL2_ttf.a \
@@ -27,13 +27,13 @@ LDFLAGS = -arch x86_64 -L$(LIBS)/lib -L/usr/local/lib -lpthread  \
           -force_load $(LIBS)/lib/libintl.a \
           -force_load $(LIBS)/lib/libopus.a \
           -force_load $(LIBS)/lib/libvorbisenc.a \
-          -force_load $(LIBS)/lib/libiconv.a \
-          -Wl,-alias_list,$(LIBS)/iconv.alias \
-          -lc++ -lpng -liconv \
+          -Wl,-undefined,dynamic_lookup \
+          -lc++ -lpng \
           -framework Cocoa -framework IOKit -framework CoreVideo \
           -framework CoreFoundation -framework AudioToolbox -framework ForceFeedback \
           -framework GameController -framework Metal -framework CoreHaptics \
           -framework CoreAudio -framework Carbon
+
 
 
 

@@ -109,8 +109,20 @@ void	cleanup_textures(t_textures *textures)
 	}
 }
 
+void	cleanup_sounds(t_game *game)
+{
+	if (SOUNDS.ambient)
+		Mix_FreeMusic(SOUNDS.ambient);
+	if (SOUNDS.running)
+		Mix_FreeChunk(SOUNDS.running);
+	if (SOUNDS.walking)
+		Mix_FreeChunk(SOUNDS.walking);
+	Mix_CloseAudio();
+}
+
 void	cleanup(t_game *game)
 {
+	cleanup_sounds(game);
 	cleanup_textures(&game->textures);
 	free_all_maps(game);
 	free_entities(game);

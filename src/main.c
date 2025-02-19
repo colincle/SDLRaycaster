@@ -25,6 +25,40 @@ void map_trigger(t_game *game)
 	}
 }
 
+void sounds(t_game *game)
+{
+	if (!Mix_PlayingMusic())
+	{
+		if (Mix_PlayMusic(SOUNDS.ambient, -1) == -1)
+		{
+			fprintf(stderr, "Failed to play music: %s\n", Mix_GetError());
+		}
+	}
+	if (MOVING == RUNNING)
+	{
+		if (Mix_Playing(2))
+			Mix_HaltChannel(2);
+		if (!Mix_Playing(1))
+		{
+			Mix_PlayChannel(1, SOUNDS.running, 0);
+		}
+	}
+	if (MOVING == WALKING)
+	{
+		if (Mix_Playing(1))
+			Mix_HaltChannel(1);
+		if (!Mix_Playing(2))
+		{
+			Mix_PlayChannel(2, SOUNDS.walking, 0);
+		}
+	}
+	if (MOVING == STILL)
+	{
+		Mix_HaltChannel(-1);
+	}
+}
+
+
 static void	game_loop(t_game *game)
 {
 	int		running;
@@ -34,6 +68,7 @@ static void	game_loop(t_game *game)
 	LEVEL = START_LEVEL;
 	while (running)
 	{
+		sounds(game);
 		chapter[LEVEL](game, &running);
 		map_trigger(game);
 		handle_events(game, &running);
@@ -42,6 +77,7 @@ static void	game_loop(t_game *game)
 		render_next_frame(game);
 		debug_statements(game);
 		manage_fps(game);
+		printf("%d%c------------------------%c", MOVING, 10, 10); fflush(stdout); //debug
 	}
 }
 

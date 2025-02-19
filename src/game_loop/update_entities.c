@@ -34,6 +34,10 @@ static void	move_player(t_game *game, int key)
 		PLAYER_X = x;
 	if (MAPS[LEVEL][(int)y][(int)PLAYER_X] != WALL)
 		PLAYER_Y = y;
+	if (PLAYER_SPEED == DEFAULT_SPEED)
+		MOVING = WALKING;
+	else
+		MOVING = RUNNING;
 }
 
 static void	move_player_joystick(t_game *game, float x, float y)
@@ -56,6 +60,10 @@ static void	move_player_joystick(t_game *game, float x, float y)
 		PLAYER_X = move_x;
 	if (MAPS[LEVEL][(int)move_y][(int)PLAYER_X] != WALL)
 		PLAYER_Y = move_y;
+	if (PLAYER_SPEED == DEFAULT_SPEED)
+		MOVING = WALKING;
+	else
+		MOVING = RUNNING;
 }
 
 void	rotate_player_mouse(t_game *game, int x)
@@ -154,6 +162,8 @@ static void	update_player(t_game *game)
 		rotate_player_joystick(game, JOYSTICK_ROT_X);
 	if (fabs(JOYSTICK_ROT_Y) > 0.1)
 		look_up_and_down_joystick(game, JOYSTICK_ROT_Y);
+	if (fabs(JOYSTICK_Y) < 0.1 && !fabs(JOYSTICK_X) < 0.1 && !KEYS[W] && !KEYS[S] && !KEYS[A] && !KEYS[D])
+		MOVING = STILL;
 }
 
 void	update_entities(t_game *game)

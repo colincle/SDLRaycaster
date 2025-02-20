@@ -11,6 +11,10 @@
 # include <stdio.h>
 # include <fcntl.h>
 
+#define MAP_HEIGHT 23
+#define MAP_WIDTH 50
+
+
 //==============================MACROS
 // SETTINGS
 # define FOV			53
@@ -141,6 +145,13 @@ typedef struct s_mini_ray
 	float				perp_wall_dist;
 }						t_mini_ray;
 
+typedef struct s_mini_ray_node
+{
+	t_mini_ray			ray;
+	struct s_mini_ray_node *next;
+}						t_mini_ray_node;
+
+
 typedef struct s_raycaster
 {
 	int					x;
@@ -163,7 +174,7 @@ typedef struct s_raycaster
 	float				delta_dist_x;
 	float				delta_dist_y;
 	float				perp_wall_dist;
-	t_mini_ray			mini_ray;
+	t_mini_ray_node		*mini_ray;
 }						t_raycaster;
 
 

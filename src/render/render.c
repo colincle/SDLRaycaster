@@ -308,13 +308,32 @@ void	cast_floor_and_ceiling(t_game *game)
 	SDL_RenderCopy(game->renderer, game->textures.screen_texture, NULL, NULL);
 }
 
+void	render_mini_rays(t_game *game, t_mini_ray_node **head)
+{
+	t_mini_ray_node *current = *head;
+	t_mini_ray_node *temp;
+
+	while (current)
+	{
+		if (current->ray.detetcted < 5)
+			half_up_block(game, &current->ray);
+		else
+			half_down_block(game, &current->ray);
+
+		temp = current;
+		current = current->next;
+		free(temp);
+	}
+
+	*head = NULL;
+}
+
 
 static void	draw_scene(t_game *game)
 {
 	t_raycaster	r;
 
 	cast_floor_and_ceiling(game);
-	r.mini_ray.detetcted = -1;
 	r.x = 0;
 	while (r.x < WIND_WIDTH)
 	{
@@ -322,13 +341,7 @@ static void	draw_scene(t_game *game)
 		init_raycaster_steps(&r);
 		perform_raycaster_steps(&r, game);
 		proto_3d_render(game, &r);
-		if (r.mini_ray.detetcted != -1)
-		{
-			if (r.mini_ray.detetcted < 5)
-				half_up_block(game, &r.mini_ray);
-			else
-				half_down_block(game, &r.mini_ray);
-		}
+		render_mini_rays(game, &r.mini_ray);
 		r.x += PIXEL_BLOCK;
 	}
 }

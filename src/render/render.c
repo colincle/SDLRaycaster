@@ -5,6 +5,121 @@
 
 #include <SDLRaycaster.h>
 
+static void	half_down_block(t_game *game, t_mini_ray *r)
+{
+	int			tex_x;
+	int			start;
+	int			block_height;
+	double		wall_x;
+	SDL_Rect	dest;
+	SDL_Rect	src;
+	int			wind_height;
+	int			tex_w;
+	int			tex_h;
+	double		inv_perp_wall_dist;
+	SDL_Texture	*wall_texture;
+
+	SDL_SetTextureColorMod(game->textures.wall.texture, 255, 255, 255); // Reset brightness
+
+	wind_height = WIND_HEIGHT;
+	tex_w = game->textures.wall.width;
+	tex_h = game->textures.wall.height;
+	inv_perp_wall_dist = 1.0 / (r->perp_wall_dist / 2);
+	int line_height = (int)(wind_height * inv_perp_wall_dist); // Keep base height
+
+	start = ((wind_height - line_height) >> 1) + CAM_SHIFT;
+
+	// Fix scaling to have a proper min size & max cap
+	double normalized = (r->detetcted - 5) / 4.0; // Range: 0 (min) to 1 (max)
+	block_height = line_height * (0.1 + (normalized * 0.8)); // Min 10%, Max 90%
+
+	wall_x = (r->side == 0)
+		? (r->pos_y + r->perp_wall_dist * r->ray_dir_y)
+		: (r->pos_x + r->perp_wall_dist * r->ray_dir_x);
+	wall_x -= (int)wall_x;
+	tex_x = (int)(wall_x * tex_w);
+	tex_x &= (tex_w - 1);
+
+	// Darken walls that face north/south (side 1)
+	if (r->side == 1)
+		SDL_SetTextureColorMod(game->textures.wall.texture, 180, 180, 180);
+
+	src.x = tex_x;
+	src.y = 0;
+	src.w = 1;
+	src.h = tex_h;
+	dest.x = r->x;
+	dest.y = start;
+	dest.h = block_height; // Scaled height with a proper min/max range
+	dest.w = PIXEL_BLOCK;
+
+	// Render the wall
+	SDL_RenderCopy(RENDERER, game->textures.wall.texture, &src, &dest);
+
+	// Reset texture brightness for next frame
+	SDL_SetTextureColorMod(game->textures.wall.texture, 255, 255, 255);
+	r->detetcted = -1;
+}
+
+static void	half_up_block(t_game *game, t_mini_ray *r)
+{
+	int			tex_x;
+	int			start;
+	int			block_height;
+	double		wall_x;
+	SDL_Rect	dest;
+	SDL_Rect	src;
+	int			wind_height;
+	int			tex_w;
+	int			tex_h;
+	double		inv_perp_wall_dist;
+	SDL_Texture	*wall_texture;
+
+	SDL_SetTextureColorMod(game->textures.wall.texture, 255, 255, 255); // Reset brightness
+
+	wind_height = WIND_HEIGHT;
+	tex_w = game->textures.wall.width;
+	tex_h = game->textures.wall.height;
+	inv_perp_wall_dist = 1.0 / (r->perp_wall_dist / 2);
+	int line_height = (int)(wind_height * inv_perp_wall_dist); // Keep base height
+
+	start = ((wind_height - line_height) >> 1) + CAM_SHIFT;
+
+	// Fix scaling for proper min/max heights
+	double normalized = r->detetcted / 4.0; // Range: 0 (min) to 1 (max)
+	block_height = line_height * (0.1 + (normalized * 0.8)); // Min 10%, Max 90%
+
+	// Move the wall upwards by its height to stick it to the floor
+	wall_x = (r->side == 0)
+		? (r->pos_y + r->perp_wall_dist * r->ray_dir_y)
+		: (r->pos_x + r->perp_wall_dist * r->ray_dir_x);
+	wall_x -= (int)wall_x;
+	tex_x = (int)(wall_x * tex_w);
+	tex_x &= (tex_w - 1);
+
+	// Darken walls that face north/south (side 1)
+	if (r->side == 1)
+		SDL_SetTextureColorMod(game->textures.wall.texture, 180, 180, 180);
+
+	src.x = tex_x;
+	src.y = 0;
+	src.w = 1;
+	src.h = tex_h;
+	dest.x = r->x;
+	dest.y = start + (line_height - block_height); // Stick it on the floor
+	dest.h = block_height; // Proportional height scaling
+	dest.w = PIXEL_BLOCK;
+
+	// Render the wall
+	SDL_RenderCopy(RENDERER, game->textures.wall.texture, &src, &dest);
+
+	// Reset texture brightness for next frame
+	SDL_SetTextureColorMod(game->textures.wall.texture, 255, 255, 255);
+	r->detetcted = -1;
+}
+
+
+
 static void	proto_3d_render(t_game *game, t_raycaster *r)
 {
 	int			tex_x;
@@ -199,6 +314,7 @@ static void	draw_scene(t_game *game)
 	t_raycaster	r;
 
 	cast_floor_and_ceiling(game);
+	r.mini_ray.detetcted = -1;
 	r.x = 0;
 	while (r.x < WIND_WIDTH)
 	{
@@ -206,6 +322,13 @@ static void	draw_scene(t_game *game)
 		init_raycaster_steps(&r);
 		perform_raycaster_steps(&r, game);
 		proto_3d_render(game, &r);
+		if (r.mini_ray.detetcted != -1)
+		{
+			if (r.mini_ray.detetcted < 5)
+				half_up_block(game, &r.mini_ray);
+			else
+				half_down_block(game, &r.mini_ray);
+		}
 		r.x += PIXEL_BLOCK;
 	}
 }
@@ -217,3 +340,5 @@ void	render_next_frame(t_game *game)
 	draw_minimap(game);
 	SDL_RenderPresent(RENDERER);
 }
+
+	

@@ -162,7 +162,7 @@ static void	update_player(t_game *game)
 		rotate_player_joystick(game, JOYSTICK_ROT_X);
 	if (fabs(JOYSTICK_ROT_Y) > 0.1)
 		look_up_and_down_joystick(game, JOYSTICK_ROT_Y);
-	if (fabs(JOYSTICK_Y) < 0.1 && !fabs(JOYSTICK_X) < 0.1 && !KEYS[W] && !KEYS[S] && !KEYS[A] && !KEYS[D])
+	if (fabs(JOYSTICK_Y) < 0.1 && fabs(JOYSTICK_X) < 0.1 && !KEYS[W] && !KEYS[S] && !KEYS[A] && !KEYS[D])
 		MOVING = STILL;
 }
 

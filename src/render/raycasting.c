@@ -5,26 +5,6 @@
 
 #include <SDLRaycaster.h>
 
-static void	analyse_ray_data(t_raycaster *r)
-{
-	if (r->side)
-	{
-		if (r->ray_dir_y > 0)
-		{
-			r->wall_dir = SOUTH;
-			return ;
-		}
-		r->wall_dir = NORTH;
-		return ;
-	}
-	if (r->ray_dir_x > 0)
-	{
-		r->wall_dir = EAST;
-		return ;
-	}
-	r->wall_dir = WEST;
-}
-
 static void	ray_has_hit_wall(t_raycaster *r)
 {
 	double	inv_ray_dir_x;
@@ -57,6 +37,18 @@ void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 		// 		return ;
 		// 	}
 		// }
+		if (map[r->map_y][r->map_x] >= '0' && map[r->map_y][r->map_x] <= '9' && r->mini_ray.detetcted == -1)
+		{
+			ray_has_hit_wall(r);
+			r->mini_ray.detetcted = map[r->map_y][r->map_x] - '0';
+			r->mini_ray.perp_wall_dist = r->perp_wall_dist;
+			r->mini_ray.pos_x = r->pos_x;
+			r->mini_ray.pos_y = r->pos_y;
+			r->mini_ray.ray_dir_x = r->ray_dir_x;
+			r->mini_ray.ray_dir_y = r->ray_dir_y;
+			r->mini_ray.side = r->side;
+			r->mini_ray.x = r->x;
+		}
 		if (r->side_dist_x < r->side_dist_y)
 		{
 			r->side_dist_x += r->delta_dist_x;
@@ -71,7 +63,6 @@ void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 		}
 	}
 	ray_has_hit_wall(r);
-	analyse_ray_data(r);
 }
 
 void	init_raycaster_steps(t_raycaster *r)

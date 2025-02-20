@@ -35,6 +35,18 @@
 
 // MAP CHARACTERS
 # define WALL			'#'
+// Sticking out of the floor
+# define WALL_0			'0'
+# define WALL_1			'1'
+# define WALL_2			'2'
+# define WALL_3			'3'
+# define WALL_4			'4'
+// Sticking out of the ceiling
+# define WALL_5			'5'
+# define WALL_6			'6'
+# define WALL_7			'7'
+# define WALL_8			'8'
+# define WALL_9			'9'
 # define VOID			'.'
 # define EMPTY			' '
 # define P_NORTH		'N'
@@ -117,6 +129,18 @@ typedef struct s_sounds
 	Mix_Chunk			*walking;
 }						t_sounds;
 
+typedef struct s_mini_ray
+{
+	int					detetcted;
+	int					x;
+	int					side;
+	float				pos_x;
+	float				pos_y;
+	float				ray_dir_x;
+	float				ray_dir_y;
+	float				perp_wall_dist;
+}						t_mini_ray;
+
 typedef struct s_raycaster
 {
 	int					x;
@@ -139,7 +163,9 @@ typedef struct s_raycaster
 	float				delta_dist_x;
 	float				delta_dist_y;
 	float				perp_wall_dist;
+	t_mini_ray			mini_ray;
 }						t_raycaster;
+
 
 typedef struct s_input
 {

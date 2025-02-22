@@ -204,8 +204,13 @@ typedef struct s_textures
 {
 	SDL_Texture			*screen_texture;
 	t_texture			wall;
+	t_texture			wall_dark;
 	t_texture			ceiling;
+	t_texture			ceiling_dark;
+	t_texture			ceiling_darker;
 	t_texture			floor;
+	t_texture			floor_light;
+	t_texture			floor_lighter;
 }						t_textures;
 
 typedef struct s_game

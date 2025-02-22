@@ -130,8 +130,13 @@ void	load_textures(t_game *game)
 		cleanup(game);
 	}
 	load_texture(game, "./assets/textures/png/wall.png", &game->textures.wall);
+	load_texture(game, "./assets/textures/png/wall_dark.png", &game->textures.wall_dark);
 	load_texture(game, "./assets/textures/png/ceiling.png", &game->textures.ceiling);
+	load_texture(game, "./assets/textures/png/ceiling_dark.png", &game->textures.ceiling_dark);
+	load_texture(game, "./assets/textures/png/ceiling_darker.png", &game->textures.ceiling_darker);
 	load_texture(game, "./assets/textures/png/floor.png", &game->textures.floor);
+	load_texture(game, "./assets/textures/png/floor_light.png", &game->textures.floor_light);
+	load_texture(game, "./assets/textures/png/floor_lighter.png", &game->textures.floor_lighter);
 }
 
 void	sound_init(t_game *game)

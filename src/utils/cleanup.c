@@ -97,15 +97,40 @@ void	cleanup_textures(t_game *game)
 		SDL_DestroyTexture(game->textures.wall.texture);
 		game->textures.wall.texture = NULL;
 	}
+	if (game->textures.wall_dark.texture)
+	{
+		SDL_DestroyTexture(game->textures.wall_dark.texture);
+		game->textures.wall_dark.texture = NULL;
+	}
 	if (game->textures.ceiling.texture)
 	{
 		SDL_DestroyTexture(game->textures.ceiling.texture);
 		game->textures.ceiling.texture = NULL;
 	}
+	if (game->textures.ceiling_dark.texture)
+	{
+		SDL_DestroyTexture(game->textures.ceiling_dark.texture);
+		game->textures.ceiling_dark.texture = NULL;
+	}
+	if (game->textures.ceiling_darker.texture)
+	{
+		SDL_DestroyTexture(game->textures.ceiling_darker.texture);
+		game->textures.ceiling_darker.texture = NULL;
+	}
 	if (game->textures.floor.texture)
 	{
 		SDL_DestroyTexture(game->textures.floor.texture);
 		game->textures.floor.texture = NULL;
+	}
+	if (game->textures.floor_light.texture)
+	{
+		SDL_DestroyTexture(game->textures.floor_light.texture);
+		game->textures.floor_light.texture = NULL;
+	}
+	if (game->textures.floor_lighter.texture)
+	{
+		SDL_DestroyTexture(game->textures.floor_lighter.texture);
+		game->textures.floor_lighter.texture = NULL;
 	}
 	if (game->textures.screen_texture)
 	{
@@ -113,7 +138,6 @@ void	cleanup_textures(t_game *game)
 		game->textures.screen_texture = NULL;
 	}
 }
-
 
 void	cleanup_sounds(t_game *game)
 {

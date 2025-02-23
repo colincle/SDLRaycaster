@@ -156,6 +156,7 @@ void	cleanup(t_game *game)
 	cleanup_textures(game);
 	free_all_maps(game);
 	free(game->z_buffer);
+	free(game->screen);
 	free_entities(game);
 	free_vector_grid(game);
 	free(game);

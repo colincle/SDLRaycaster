@@ -5,6 +5,16 @@
 
 #include <SDLRaycaster.h>
 
+void	get_P_cores(t_game *game)
+{
+	int pcores = 0;
+	size_t size = sizeof(pcores);
+	if (sysctlbyname("hw.perflevel0.logicalcpu", &pcores, &size, NULL, 0) == 0)
+		game->P_cores = pcores;
+	else
+		game->P_cores = 0;
+}
+
 static void	game_struct_init(t_game *game)
 {
 	init_maps(game);
@@ -12,7 +22,11 @@ static void	game_struct_init(t_game *game)
 	init_vector_grid(game);
 	init_entities(game);
 	print_entities(game);
+	get_P_cores(game);
 	game->z_buffer = calloc(WIND_HEIGHT * WIND_WIDTH, sizeof(float));
+	if (!game->z_buffer)
+		cleanup(game);
+	game->screen = calloc(WIND_HEIGHT * WIND_WIDTH, sizeof(float));
 	if (!game->z_buffer)
 		cleanup(game);
 	KEYS = malloc(sizeof(int) * HOW_MANY_KEYS);

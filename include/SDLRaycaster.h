@@ -5,6 +5,8 @@
 # include <SDL2/SDL_mixer.h>
 # include <SDL2/SDL_ttf.h>
 # include <SDL2/SDL.h>
+# include <sys/types.h>
+# include <sys/sysctl.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -118,6 +120,9 @@ typedef struct s_entity
 	float				y;
 	t_float_xy			dir;
 	t_float_xy			cam;
+	int					camera_shift;
+	int					height;
+	int					jumping;
 }						t_entity;
 
 typedef struct s_frames
@@ -136,7 +141,6 @@ typedef struct s_sounds
 typedef struct s_floor_ceiling
 {
 	Uint32				*pixels;
-	int					pitch;
 	Uint32				*floor_pixels;
 	Uint32				*ceiling_pixels;
 	float				ray_dir_x_0;
@@ -213,6 +217,7 @@ typedef struct s_textures
 	t_texture			floor_lighter;
 }						t_textures;
 
+
 typedef struct s_game
 {
 	float				fps;
@@ -222,7 +227,7 @@ typedef struct s_game
 	SDL_Window			*window;
 	char				***maps;
 	t_entity			**player;
-	t_entity			***enemy;
+	t_entity			***enemy;// need to make the enemy his own struct
 	int					speed;
 	int					moving;
 	t_textures			textures;
@@ -232,13 +237,24 @@ typedef struct s_game
 	float				*z_buffer;
 	t_float_xy			***vector_grid;
 	t_sounds			sounds;
-	int					camera_shift;
+	Uint32				*screen;
+	int					P_cores;
 }						t_game;
+typedef struct s_rendering_threads
+{
+	int					total_threads;
+	int					thread_id;
+	int					start;
+	int					end;
+	t_game				*game;
+}						t_rendering_threads;
 
 # define FPS			game->fps
 # define MAPS			game->maps
 # define LEVEL			game->level
-# define CAM_SHIFT		game->camera_shift
+# define CAM_SHIFT		game->player.camera_shift
+# define CAM_SHIFT		game->player.height
+# define CAM_SHIFT		game->player.jumping
 # define EVENT			game->event
 # define ENEMY			game->ENEMY
 # define MOVING			game->moving

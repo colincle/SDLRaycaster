@@ -5,6 +5,69 @@
 
 #include <SDLRaycaster.h>
 
+int	traversable(char c)
+{
+	return
+	(
+		c != WALL
+		&& c != WALL
+		&& c != WALL_1
+		&& c != WALL_2
+		&& c != WALL_3
+		&& c != WALL_4
+		&& c != WALL_7
+		&& c != WALL_8
+		&& c != WALL_9
+		&& c != VOID
+		&& c != DOOR_CLOSED
+	);
+}
+
+#define COLLISION_RADIUS 0.3f
+
+// Returns true if the circle centered at (x,y) with radius COLLISION_RADIUS collides with a wall.
+int check_circle_collision(t_game *game, float x, float y)
+{
+    int cell_min_x = (int)floorf(x - COLLISION_RADIUS);
+    int cell_max_x = (int)ceilf(x + COLLISION_RADIUS);
+    int cell_min_y = (int)floorf(y - COLLISION_RADIUS);
+    int cell_max_y = (int)ceilf(y + COLLISION_RADIUS);
+
+    for (int j = cell_min_y; j <= cell_max_y; j++) {
+        for (int i = cell_min_x; i <= cell_max_x; i++) {
+            if (!traversable(MAPS[LEVEL][j][i])) {
+                // Compute the nearest point on the cell (i,j) to (x,y)
+                float nearest_x = fmaxf(i, fminf(x, i + 1));
+                float nearest_y = fmaxf(j, fminf(y, j + 1));
+                float dx = x - nearest_x;
+                float dy = y - nearest_y;
+                if ((dx * dx + dy * dy) < (COLLISION_RADIUS * COLLISION_RADIUS))
+                    return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+void collisions(t_game *game, float new_x, float new_y)
+{
+    float old_x = PLAYER_X;
+    float old_y = PLAYER_Y;
+    float dx = new_x - old_x;
+    float dy = new_y - old_y;
+
+    // Try moving along X axis first
+    float temp_x = old_x + dx;
+    if (!check_circle_collision(game, temp_x, old_y))
+        PLAYER_X = temp_x;
+    // Then try moving along Y axis
+    float temp_y = old_y + dy;
+    if (!check_circle_collision(game, PLAYER_X, temp_y))
+        PLAYER_Y = temp_y;
+}
+
+
+
 static void	move_player(t_game *game, int key)
 {
 	float	x;
@@ -30,10 +93,7 @@ static void	move_player(t_game *game, int key)
 		x = PLAYER_X - (PLAYER_DIR_Y * (PLAYER_SPEED * 0.6) * (1.0 / FPS));
 		y = PLAYER_Y + (PLAYER_DIR_X * (PLAYER_SPEED * 0.6) * (1.0 / FPS));
 	}
-	if (MAPS[LEVEL][(int)PLAYER_Y][(int)x] != WALL)
-		PLAYER_X = x;
-	if (MAPS[LEVEL][(int)y][(int)PLAYER_X] != WALL)
-		PLAYER_Y = y;
+	collisions(game, x, y);
 	if (PLAYER_SPEED == DEFAULT_SPEED)
 		MOVING = WALKING;
 	else
@@ -56,10 +116,7 @@ static void	move_player_joystick(t_game *game, float x, float y)
 		move_x += PLAYER_DIR_X * PLAYER_SPEED * (y * frame_time);
 		move_y += PLAYER_DIR_Y * PLAYER_SPEED * (y * frame_time);
 	}
-	if (MAPS[LEVEL][(int)PLAYER_Y][(int)move_x] != WALL)
-		PLAYER_X = move_x;
-	if (MAPS[LEVEL][(int)move_y][(int)PLAYER_X] != WALL)
-		PLAYER_Y = move_y;
+	collisions(game, move_x, move_y);
 	if (PLAYER_SPEED == DEFAULT_SPEED)
 		MOVING = WALKING;
 	else

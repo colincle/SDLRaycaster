@@ -7,6 +7,8 @@
 
 void	keydown(t_game *game, SDL_KeyCode code)
 {
+	static Uint32	c_timer;
+
 	if (code == SDLK_w)
 		KEYS[W] = TRUE;
 	if (code == SDLK_a)

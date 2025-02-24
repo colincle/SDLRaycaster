@@ -19,7 +19,7 @@
 //==============================MACROS
 // SETTINGS
 # define FOV			53
-# define FPS_CAP		60
+# define FPS_CAP		61
 # define DEFAULT_SPEED	2
 # define MOUSE_SENSIT	0.01
 # define JOY_SENSIT		2
@@ -31,7 +31,7 @@
 # define PRINT_MAPS 	FALSE
 # define SHOW_MINIMAP 	FALSE
 # define SHOW_PATH_FIND FALSE
-# define SHOW_FPS		FALSE
+# define SHOW_FPS		TRUE
 # define SHOW_DIRECTION	FALSE
 # define SHOW_POSITION	FALSE
 # define SHOW_CAM_PLANE	FALSE
@@ -78,6 +78,10 @@
 # define C				5
 # define HOW_MANY_KEYS	6
 
+// KEYS STATES
+# define PRESS			1
+# define HOLD			2
+
 // PLAYER MOVEMENT
 
 # define STILL			0
@@ -101,11 +105,12 @@
 # define WEST			0xA52A2A // Red
 
 //==============================STRUCTS
+
 typedef struct s_point
 {
 	int					x;
 	int					y;
-}	t_point;
+}						t_point;
 
 typedef struct s_float_xy
 {
@@ -196,6 +201,8 @@ typedef struct s_mini_ray_node
 typedef struct s_input
 {
 	int					*keys;
+	Uint32				c_hold;
+	int					c_state;
 	int					mouse_x_rel;
 	int					mouse_y_rel;
 	float				joystick_velocity_x;
@@ -306,6 +313,7 @@ SDL_Color				int_to_color(Uint32 color);
 void					draw_minimap(t_game *game);
 void					init_entities(t_game *game);
 void					print_all_maps(t_game *game);
+Uint32					start_timer(Uint32 milliseconds);
 void					print_entities(t_game *game);
 void					update_entities(t_game *game);
 void					init_vector_grid(t_game *game);

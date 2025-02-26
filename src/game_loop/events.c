@@ -14,65 +14,46 @@ void	handle_events(t_game *game, int *running)
 			MOUSE_X = EVENT.motion.xrel;
 			MOUSE_Y = EVENT.motion.yrel;
 		}
-		if (EVENT.type == SDL_CONTROLLERAXISMOTION)
+		else if (EVENT.type == SDL_CONTROLLERAXISMOTION)
 		{
 			if (EVENT.caxis.axis == 0)
 				JOYSTICK_X = EVENT.caxis.value / 32768.0f;
-			if (EVENT.caxis.axis == 1)
+			else if (EVENT.caxis.axis == 1)
 				JOYSTICK_Y = -EVENT.caxis.value / 32768.0f;
-			if (EVENT.caxis.axis == 2)
+			else if (EVENT.caxis.axis == 2)
 				JOYSTICK_ROT_X = -EVENT.caxis.value / 32768.0f;
-			if (EVENT.caxis.axis == 3)
+			else if (EVENT.caxis.axis == 3)
 				JOYSTICK_ROT_Y = -(EVENT.caxis.value / 32767.0f);
 		}
-		if (EVENT.type == SDL_KEYDOWN)
+		else if (EVENT.type == SDL_KEYDOWN)
 		{
 			keydown(game, EVENT.key.keysym.sym);
+			if (EVENT.key.keysym.sym == SDLK_SPACE && !JUMP)
+				JUMP = JUMP_UP;
+			else if (EVENT.key.keysym.sym == SDLK_k && !JUMP) // to be removed
+				printf("PLAYER_HEIGHT = %d\n", --PLAYER_HEIGHT); // to be removed
+			else if (EVENT.key.keysym.sym == SDLK_i && !JUMP) // to be removed
+				printf("PLAYER_HEIGHT = %d\n", ++PLAYER_HEIGHT); // to be removed
+			else if (EVENT.key.keysym.sym == SDLK_l && !JUMP) // to be removed
+				printf("PLAYER_HEIGHT = %d\n", PLAYER_HEIGHT -= 10); // to be removed
+			else if (EVENT.key.keysym.sym == SDLK_o && !JUMP) // to be removed
+				printf("PLAYER_HEIGHT = %d\n", PLAYER_HEIGHT += 10); // to be removed
+			else if (EVENT.key.keysym.sym == SDLK_ESCAPE)
+				*running = 0;
 		}
-		if (EVENT.type == SDL_KEYUP)
+		else if (EVENT.type == SDL_KEYUP)
 		{
 			keyup(game, EVENT.key.keysym.sym);
 		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_SPACE && !JUMP)
+		else if (EVENT.type == SDL_CONTROLLERBUTTONDOWN && EVENT.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
 		{
-			JUMP = JUMP_UP;
+			PLAYER_SPEED = (PLAYER_SPEED == DEFAULT_SPEED) ? DEFAULT_SPEED + 2 : DEFAULT_SPEED;
 		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_k && !JUMP)// to be removed
-		{
-			PLAYER_HEIGHT--;
-			printf("PLAYER_HEIGHT = %d%c------------------------%c", PLAYER_HEIGHT, 10, 10); fflush(stdout); //debug
-		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_i && !JUMP)
-		{
-			PLAYER_HEIGHT++;
-			printf("PLAYER_HEIGHT = %d%c------------------------%c", PLAYER_HEIGHT, 10, 10); fflush(stdout); //debug
-		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_l && !JUMP)// to be removed
-		{
-			PLAYER_HEIGHT = PLAYER_HEIGHT - 10;
-			printf("PLAYER_HEIGHT = %d%c------------------------%c", PLAYER_HEIGHT, 10, 10); fflush(stdout); //debug
-		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_o && !JUMP)
-		{
-			PLAYER_HEIGHT = PLAYER_HEIGHT + 10;
-			printf("PLAYER_HEIGHT = %d%c------------------------%c", PLAYER_HEIGHT, 10, 10); fflush(stdout); //debug
-		}
-		if (EVENT.type == SDL_CONTROLLERBUTTONDOWN && EVENT.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
-		{
-			if (PLAYER_SPEED == DEFAULT_SPEED)
-				PLAYER_SPEED = DEFAULT_SPEED + 2;
-			else
-				PLAYER_SPEED = DEFAULT_SPEED;
-		}
-		if (EVENT.type == SDL_KEYDOWN && EVENT.key.keysym.sym == SDLK_ESCAPE)
+		else if (EVENT.type == SDL_QUIT)
 		{
 			*running = 0;
 		}
-		if (EVENT.type == SDL_QUIT)
-		{
-			*running = 0;
-		}
-		if (EVENT.type == SDL_WINDOWEVENT && EVENT.window.event == SDL_WINDOWEVENT_RESIZED)
+		else if (EVENT.type == SDL_WINDOWEVENT && EVENT.window.event == SDL_WINDOWEVENT_RESIZED)
 		{
 			WIND_WIDTH = EVENT.window.data1;
 			WIND_HEIGHT = EVENT.window.data2;

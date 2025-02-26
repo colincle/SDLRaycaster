@@ -13,7 +13,7 @@ void	quit_game(t_game *game)
 	exit(EXIT_SUCCESS);
 }
 
-void map_trigger(t_game *game)
+void	level_trigger(t_game *game)
 {
 	if (MAPS[LEVEL][(int)PLAYER_Y][(int)PLAYER_X] == TRIGGER)
 	{
@@ -21,11 +21,21 @@ void map_trigger(t_game *game)
 		game->player[LEVEL + 1]->y = PLAYER_Y;
 		game->player[LEVEL + 1]->dir.x = PLAYER_DIR_X;
 		game->player[LEVEL + 1]->dir.y = PLAYER_DIR_Y;
+		game->player[LEVEL + 1]->cam.x = PLAYER_CAM_X;
+		game->player[LEVEL + 1]->cam.y = PLAYER_CAM_Y;
+		game->player[LEVEL + 1]->camera_shift = CAM_SHIFT;
+		game->player[LEVEL + 1]->player_base_height = BASE_HEIGHT;
+		game->player[LEVEL + 1]->standing_on = STANDING_ON;
+		game->player[LEVEL + 1]->player_height = PLAYER_HEIGHT;
+		game->player[LEVEL + 1]->feet_height = FEET_HEIGHT;
+		game->player[LEVEL + 1]->eye_height = EYE_HEIGHT;
+		game->player[LEVEL + 1]->jumping = JUMP;
+		game->player[LEVEL + 1]->crouching = CROUCH;
 		LEVEL++;
 	}
 }
 
-void sounds(t_game *game)
+void	sounds(t_game *game)
 {
 	if (!Mix_PlayingMusic())
 	{
@@ -58,7 +68,6 @@ void sounds(t_game *game)
 	}
 }
 
-
 static void	game_loop(t_game *game)
 {
 	int		running;
@@ -70,7 +79,7 @@ static void	game_loop(t_game *game)
 	{
 		sounds(game);
 		chapter[LEVEL](game, &running);
-		map_trigger(game);
+		level_trigger(game);
 		handle_events(game, &running);
 		manage_controller(game);
 		update_entities(game);
@@ -84,7 +93,7 @@ int	main(void)
 {
 	t_game	*game;
 
-	game = game_init();
+	game = init_game();
 	game_loop(game);
 	cleanup(game);
 	return (0);

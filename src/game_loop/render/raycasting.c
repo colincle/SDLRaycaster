@@ -22,26 +22,20 @@ void	ray_has_hit_wall(t_raycaster *r)
 	r->wall_hit_y = r->pos_y + r->ray_dir_y * perp_dist;
 }
 
-void	store_mini_ray(t_mini_ray_node **head, t_raycaster r, char **map)
+int	store_mini_ray(t_mini_ray **head, t_raycaster r, char **map)
 {
-	t_mini_ray_node *new_node;
+	t_mini_ray	*new_node;
 
-	if (map[r.map_y][r.map_x] >= '0' && map[r.map_y][r.map_x] <= '9')
-	{
-		ray_has_hit_wall(&r);
-		new_node = malloc(sizeof(t_mini_ray_node));
-		if (!new_node)
-			exit(1);
-
-		new_node->ray = r;  // Copy entire struct
-		new_node->ray.detected = map[r.map_y][r.map_x] - '0';
-		new_node->next = *head; // Insert at the beginning
-		*head = new_node;
-	}
+	ray_has_hit_wall(&r);
+	new_node = malloc(sizeof(t_mini_ray));
+	if (!new_node)
+		return (1);
+	new_node->ray = r;
+	new_node->ray.detected = map[r.map_y][r.map_x] - '0';
+	new_node->next = *head;
+	*head = new_node;
+	return (0);
 }
-
-
-
 
 void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 {
@@ -58,7 +52,9 @@ void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 		// 		return ;
 		// 	}
 		// }
-		store_mini_ray(&r->mini_ray, *r, MAPS[LEVEL]);
+		if (map[r->map_y][r->map_x] >= '0' && map[r->map_y][r->map_x] <= '9')
+			if (store_mini_ray(&r->mini_ray, *r, MAPS[LEVEL]))
+				cleanup(game);
 		if (r->side_dist_x < r->side_dist_y)
 		{
 			r->side_dist_x += r->delta_dist_x;

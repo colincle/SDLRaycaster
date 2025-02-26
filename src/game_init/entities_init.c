@@ -32,12 +32,21 @@ static void	find_entities(t_game *game, int i)
 			if (MAPS[i][y][x] == P_NORTH || MAPS[i][y][x] == P_SOUTH ||
 				MAPS[i][y][x] == P_WEST || MAPS[i][y][x] == P_EAST)
 			{
-				game->player[i] = malloc(sizeof(t_entity));
+				game->player[i] = malloc(sizeof(t_player));
 				if (!game->player[i])
 				{
 					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
 					exit(EXIT_FAILURE);
 				}
+				game->player[i]->camera_shift = 0;
+				game->player[i]->player_base_height = 0;
+				game->player[i]->standing_on = EMPTY;
+				game->player[i]->player_height = 0;
+				game->player[i]->feet_height = 0;
+				game->player[i]->eye_height = 0;
+				game->player[i]->jumping = NO_JUMP;
+				game->player[i]->crouching = 0;
+				game->player[i]->speed = DEFAULT_SPEED;
 				game->player[i]->x = x + 0.5;
 				game->player[i]->y = y + 0.5;
 				if (MAPS[i][y][x] == P_NORTH)
@@ -65,13 +74,13 @@ static void	find_entities(t_game *game, int i)
 			if (MAPS[i][y][x] == E_NORTH || MAPS[i][y][x] == E_SOUTH ||
 				MAPS[i][y][x] == E_WEST || MAPS[i][y][x] == E_EAST)
 			{
-				game->enemy[i] = realloc(game->enemy[i], sizeof(t_entity *) * (e + 2));
+				game->enemy[i] = realloc(game->enemy[i], sizeof(t_player *) * (e + 2));
 				if (!game->enemy[i])
 				{
 					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
 					exit(EXIT_FAILURE);
 				}
-				game->enemy[i][e] = malloc(sizeof(t_entity));
+				game->enemy[i][e] = malloc(sizeof(t_player));
 				if (!game->enemy[i][e])
 				{
 					fprintf(stderr, "ERROR: memory allocation failed in find_entities");
@@ -109,20 +118,20 @@ static void	find_entities(t_game *game, int i)
 	game->enemy[i][e] = NULL;
 }
 
-void	init_entities(t_game *game)
+void	entities_init(t_game *game)
 {
 	int	i = 0;
 
-	game->player = malloc(sizeof(t_entity *) * NUMBER_OF_MAPS);
+	game->player = malloc(sizeof(t_player *) * NUMBER_OF_MAPS);
 	if (!game->player)
 	{
-		fprintf(stderr, "ERROR: memory allocation failed in init_entities");
+		fprintf(stderr, "ERROR: memory allocation failed in entities_init");
 		cleanup(game);
 	}
-	game->enemy = malloc(sizeof(t_entity **) * NUMBER_OF_MAPS);
+	game->enemy = malloc(sizeof(t_enemy **) * NUMBER_OF_MAPS);
 	if (!game->enemy)
 	{
-		fprintf(stderr, "ERROR: memory allocation failed in init_entities");
+		fprintf(stderr, "ERROR: memory allocation failed in entities_init");
 		cleanup(game);
 	}
 	while (i < NUMBER_OF_MAPS)

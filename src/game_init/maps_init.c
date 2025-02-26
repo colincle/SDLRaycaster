@@ -5,7 +5,7 @@
 
 #include <SDLRaycaster.h>
 
-void	init_maps(t_game *game)
+void	maps_init(t_game *game)
 {
 	char	*path;
 	int		i = 1;
@@ -13,7 +13,7 @@ void	init_maps(t_game *game)
 	MAPS = malloc(sizeof(char **) * (NUMBER_OF_MAPS + 1));
 	if (!MAPS)
 	{
-		fprintf(stderr, "ERROR: memory allocation failed in init_maps");
+		fprintf(stderr, "ERROR: memory allocation failed in maps_init");
 		exit(EXIT_FAILURE);
 	}
 	while (i <= NUMBER_OF_MAPS)
@@ -33,4 +33,3 @@ void	init_maps(t_game *game)
 	}
 	MAPS[NUMBER_OF_MAPS] = NULL;
 }
-

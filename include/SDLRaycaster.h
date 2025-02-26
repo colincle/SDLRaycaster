@@ -19,7 +19,7 @@
 //==============================MACROS
 // SETTINGS
 # define FOV				53
-# define FPS_CAP			61
+# define FPS_CAP			60
 # define DEFAULT_SPEED		2
 # define MOUSE_SENSIT		0.01
 # define JOY_SENSIT			2
@@ -30,7 +30,7 @@
 // DEBUG
 # define START_LEVEL		0
 # define SHOW_MINIMAP 		FALSE
-# define SHOW_FPS			FALSE
+# define SHOW_FPS			TRUE
 # define PRINT_ENTITIES 	FALSE
 # define PRINT_MAPS 		FALSE
 # define SHOW_POSITION		FALSE

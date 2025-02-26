@@ -49,6 +49,7 @@ TOTAL_SRCS = $(words $(SRC))
 # Colors
 DEF_COLOR   = \033[0;39m
 GREEN       = \033[0;92m
+BLUE        = \033[0;94m
 YELLOW      = \033[0;93m
 BAR_COLOR   = \033[42m
 RESET_COLOR = \033[0m
@@ -69,7 +70,14 @@ $(TARGET): $(OBJ)
 	@printf "\r\033[K"
 	@printf "$(GREEN)Linking $(TARGET)...$(DEF_COLOR)\n"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LDFLAGS)
-	@echo "$(GREEN)All done 👍$(DEF_COLOR)"
+	@printf "$(BLUE)\n"
+	@printf "  ____	 	   _								  \n"
+	@printf " |  _ \\		  | |								 \n"
+	@printf " | |_) | __ _  ___| | ___ __ ___   ___  _ __ ___  ___ \n"
+	@printf " |  _ < / _\` |/ __| |/ | '__/ _ \\ / _ \\| '_ \` _ \\/ __|\n"
+	@printf " | |_) | (_| | (__|   <| | | (_) | (_) | | | | | \\__ \\ \n"
+	@printf " |____/ \\__,_|\\___|_|\\_|_|  \\___/ \\___/|_| |_| |_|___/\n"
+	@printf "$(RESET_COLOR)\n"
 
 clean:
 	@rm -rf $(OBJ_DIR)

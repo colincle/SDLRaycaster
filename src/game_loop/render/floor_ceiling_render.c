@@ -15,20 +15,20 @@ static void	draw_floor_tile(t_game *game, t_floor_ceiling *f, t_rendering_thread
 
 	height = (type == WALL_0) * 0.402 + (type == WALL_1) * 0.202
 		+ (type == WALL_2) * 0.0 + (type == WALL_3) * -0.200;
-	pos_z = height * WIND_HEIGHT + (PLAYER_HEIGHT / 2);
+	pos_z = height * TEXTURE_HEIGHT + (PLAYER_HEIGHT / 2);
 	f->floor_pixels = game->textures.floor_light.pixels;
 	y = f->horizon - 1;
-	while (++y < WIND_HEIGHT)
+	while (++y < TEXTURE_HEIGHT)
 	{
-		p = y - (WIND_HEIGHT / 2) - CAM_SHIFT;
+		p = y - (TEXTURE_HEIGHT / 2) - CAM_SHIFT;
 		row_distance = (pos_z / p) * 2;
-		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / WIND_WIDTH;
-		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / WIND_WIDTH;
+		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / TEXTURE_WIDTH;
+		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / TEXTURE_WIDTH;
 		floor_x = PLAYER_X + row_distance * f->ray_dir_x_0
 			+ thread->start * step_x;
 		floor_y = PLAYER_Y + row_distance * f->ray_dir_y_0
 			+ thread->start * step_y;
-		row_start = y * WIND_WIDTH;
+		row_start = y * TEXTURE_WIDTH;
 		x = thread->start - 1;
 		while (++x < thread->end)
 		{
@@ -65,20 +65,20 @@ static void	draw_ceiling_tile(t_game *game, t_floor_ceiling *f, t_rendering_thre
 
 	height = (type == WALL_5) * 0.400 + (type == WALL_6) * 0.202
 		+ (type == WALL_7) * 0.0 + (type == WALL_8) * -0.200;
-	pos_z = height * WIND_HEIGHT - (PLAYER_HEIGHT / 2);
+	pos_z = height * TEXTURE_HEIGHT - (PLAYER_HEIGHT / 2);
 	f->ceiling_pixels = game->textures.ceiling_dark.pixels;
 	y = -1;
 	while (++y < f->horizon)
 	{
-		p = (WIND_HEIGHT / 2) - y + CAM_SHIFT;
+		p = (TEXTURE_HEIGHT / 2) - y + CAM_SHIFT;
 		row_distance = (pos_z / p) * 2;
-		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / WIND_WIDTH;
-		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / WIND_WIDTH;
+		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / TEXTURE_WIDTH;
+		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / TEXTURE_WIDTH;
 		ceiling_x = PLAYER_X + row_distance * f->ray_dir_x_0
 			+ thread->start * step_x;
 		ceiling_y = PLAYER_Y + row_distance * f->ray_dir_y_0
 			+ thread->start * step_y;
-		row_start = y * WIND_WIDTH;
+		row_start = y * TEXTURE_WIDTH;
 		x = thread->start - 1;
 		while (++x < thread->end)
 		{
@@ -116,20 +116,20 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 	Uint32	ceiling_color;
 	Uint32	floor_color;
 
-	f->horizon = (WIND_HEIGHT / 2) + CAM_SHIFT;
+	f->horizon = (TEXTURE_HEIGHT / 2) + CAM_SHIFT;
 	f->ceiling_pixels = game->textures.ceiling.pixels;
 	f->floor_pixels = game->textures.floor.pixels;
 	f->ray_dir_x_0 = PLAYER_DIR_X - PLAYER_CAM_X;
 	f->ray_dir_y_0 = PLAYER_DIR_Y - PLAYER_CAM_Y;
 	f->ray_dir_x_1 = PLAYER_DIR_X + PLAYER_CAM_X;
 	f->ray_dir_y_1 = PLAYER_DIR_Y + PLAYER_CAM_Y;
-	pos_z = 0.5 * WIND_HEIGHT - (PLAYER_HEIGHT / 2);
+	pos_z = 0.5 * TEXTURE_HEIGHT - (PLAYER_HEIGHT / 2);
 	for (y = 0; y < f->horizon; y += 1)
 	{
-		p = (WIND_HEIGHT / 2) - y + CAM_SHIFT;
+		p = (TEXTURE_HEIGHT / 2) - y + CAM_SHIFT;
 		row_distance = (pos_z / p) * 2;
-		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / WIND_WIDTH;
-		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / WIND_WIDTH;
+		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / TEXTURE_WIDTH;
+		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / TEXTURE_WIDTH;
 		ceiling_x = PLAYER_X + row_distance * f->ray_dir_x_0 + thread->start * step_x;
 		ceiling_y = PLAYER_Y + row_distance * f->ray_dir_y_0 + thread->start * step_y;
 		for (x = thread->start; x < thread->end; x += 1)
@@ -154,10 +154,10 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 						{
 							px = x + dx;
 							py = y + dy;
-							if (px >= thread->start && px < thread->end && py >= 0 && py < WIND_HEIGHT)
+							if (px >= thread->start && px < thread->end && py >= 0 && py < TEXTURE_HEIGHT)
 							{
-								if (check_z_buffer(game, py * WIND_WIDTH + px, row_distance))
-									f->pixels[py * WIND_WIDTH + px] = ceiling_color;
+								if (check_z_buffer(game, py * TEXTURE_WIDTH + px, row_distance))
+									f->pixels[py * TEXTURE_WIDTH + px] = ceiling_color;
 							}
 						}
 					}
@@ -167,13 +167,13 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 			ceiling_y += step_y;
 		}
 	}
-	pos_z = 0.5 * WIND_HEIGHT + (PLAYER_HEIGHT / 2);
-	for (y = f->horizon; y < WIND_HEIGHT; y++)
+	pos_z = 0.5 * TEXTURE_HEIGHT + (PLAYER_HEIGHT / 2);
+	for (y = f->horizon; y < TEXTURE_HEIGHT; y++)
 	{
-		p = y - (WIND_HEIGHT / 2) - CAM_SHIFT;
+		p = y - (TEXTURE_HEIGHT / 2) - CAM_SHIFT;
 		row_distance = (pos_z / p) * 2;
-		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / WIND_WIDTH;
-		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / WIND_WIDTH;
+		step_x = row_distance * (f->ray_dir_x_1 - f->ray_dir_x_0) / TEXTURE_WIDTH;
+		step_y = row_distance * (f->ray_dir_y_1 - f->ray_dir_y_0) / TEXTURE_WIDTH;
 		floor_x = PLAYER_X + row_distance * f->ray_dir_x_0 + thread->start * step_x;
 		floor_y = PLAYER_Y + row_distance * f->ray_dir_y_0 + thread->start * step_y;
 		for (x = thread->start; x < thread->end; x++)
@@ -198,12 +198,12 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 						{
 							px = x + dx;
 							py = y + dy;
-							if (px >= thread->start && px < thread->end && py < WIND_HEIGHT)
+							if (px >= thread->start && px < thread->end && py < TEXTURE_HEIGHT)
 							{
-								if (check_z_buffer(game, py * WIND_WIDTH + px, row_distance))
+								if (check_z_buffer(game, py * TEXTURE_WIDTH + px, row_distance))
 								{
-									set_z_buffer(game, row_distance, py * WIND_WIDTH + px);
-									f->pixels[py * WIND_WIDTH + px] = floor_color;
+									set_z_buffer(game, row_distance, py * TEXTURE_WIDTH + px);
+									f->pixels[py * TEXTURE_WIDTH + px] = floor_color;
 								}
 							}
 						}

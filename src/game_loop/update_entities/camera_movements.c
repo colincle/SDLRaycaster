@@ -8,8 +8,7 @@
 void	rotate_player_mouse(t_game *game, int x)
 {
 	double	old_dir_x;
-	double	frame_time = 1.0 / game->fps;
-	double	angle = abs(x) * MOUSE_SENSIT * frame_time;
+	double	angle = abs(x) * MOUSE_SENSIT * FRAME_TIME;
 	double	sin_rot = sin(angle);
 	double	cos_rot = cos(angle);
 
@@ -31,8 +30,7 @@ void	rotate_player_mouse(t_game *game, int x)
 void	rotate_player_joystick(t_game *game, float x)
 {
 	double	old_dir_x;
-	double	frame_time = 1.0 / game->fps;
-	double	angle = fabs(x) * JOY_SENSIT * frame_time;
+	double	angle = fabs(x) * JOY_SENSIT * FRAME_TIME;
 	double	sin_rot = sin(angle);
 	double	cos_rot = cos(angle);
 
@@ -52,9 +50,8 @@ void	rotate_player_joystick(t_game *game, float x)
 
 void	look_up_and_down_joystick(t_game *game, float x)
 {
-	double	frame_time = 1.0 / game->fps;
-	double	offset = x * JOY_SENSIT * frame_time * 500;
-	double	max_shift = WIND_HEIGHT * 0.15;
+	double	offset = x * JOY_SENSIT * FRAME_TIME * 500;
+	double	max_shift = TEXTURE_HEIGHT * 0.15;
 
 	CAM_SHIFT += offset;
 	if (CAM_SHIFT > max_shift)
@@ -65,9 +62,8 @@ void	look_up_and_down_joystick(t_game *game, float x)
 
 void	look_up_and_down_mouse(t_game *game, int y)
 {
-	double	frame_time = 1.0 / game->fps;
-	double	offset = abs(y) * MOUSE_SENSIT * frame_time * 500;
-	double	max_shift = WIND_HEIGHT * 0.15;
+	double	offset = abs(y) * MOUSE_SENSIT * FRAME_TIME * 500;
+	double	max_shift = TEXTURE_HEIGHT * 0.15;
 
 	if (y > 1)
 		CAM_SHIFT -= offset;

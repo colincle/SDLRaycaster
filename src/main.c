@@ -42,6 +42,7 @@ static void	game_loop(t_game *game)
 
 	running = TRUE;
 	LEVEL = START_LEVEL;
+
 	while (running)
 	{
 		sounds(game);

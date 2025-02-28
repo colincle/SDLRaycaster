@@ -32,8 +32,8 @@ static void	rendering_threads(t_rendering_threads *thread)
 	int					end_x;
 
 	f.pixels = thread->game->screen;
-	r.x = (thread->WIND_WIDTH * thread->thread_id) / thread->total_threads;
-	end_x = (thread->WIND_WIDTH * (thread->thread_id + 1)) / thread->total_threads;
+	r.x = (thread->TEXTURE_WIDTH * thread->thread_id) / thread->total_threads;
+	end_x = (thread->TEXTURE_WIDTH * (thread->thread_id + 1)) / thread->total_threads;
 	thread->start = r.x;
 	thread->end = end_x;
 	while (r.x < end_x)
@@ -61,8 +61,8 @@ static void	draw_scene(t_game *game)
 		thread[i].game = game;
 		thread[i].thread_id = i;
 		thread[i].total_threads = game->P_cores;
-		thread[i].start = (WIND_WIDTH * i) / game->P_cores;
-		thread[i].end = (WIND_WIDTH * (i + 1)) / game->P_cores;
+		thread[i].start = (TEXTURE_WIDTH * i) / game->P_cores;
+		thread[i].end = (TEXTURE_WIDTH * (i + 1)) / game->P_cores;
 		threads[i] = SDL_CreateThread((SDL_ThreadFunction)rendering_threads, "render", &thread[i]);
 	}
 	for (int i = 0; i < game->P_cores; i++)
@@ -73,7 +73,7 @@ static void	draw_scene(t_game *game)
 		cleanup(game);
 	if (SDL_LockTexture(game->textures.screen_texture, NULL, (void **)&pixels, &pitch) != 0)
 		cleanup(game);
-	memcpy(pixels, game->screen, game->wind_height * pitch);
+	memcpy(pixels, game->screen, game->texture_height * pitch);
 	SDL_UnlockTexture(game->textures.screen_texture);
 	SDL_RenderCopy(game->renderer, game->textures.screen_texture, NULL, NULL);
 	clear_z_buffer(game);

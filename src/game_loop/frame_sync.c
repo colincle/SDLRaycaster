@@ -29,5 +29,6 @@ void	manage_fps(t_game *game)
 	end_time = SDL_GetPerformanceCounter();
 	total_frame_time = (double)(end_time - last_time) / frequency;
 	game->fps = 1.0 / total_frame_time;
+	game->frame_time = total_frame_time;
 	last_time = end_time;
 }

@@ -7,19 +7,19 @@
 
 void	half_down_block(t_game *game, t_raycaster *r, void *pixels)
 {
-	int			tex_x, start, block_height, wind_height, tex_w, tex_h;
+	int			tex_x, start, block_height, texture_height, tex_w, tex_h;
 	int			pixel_index, tex_y, tex_index, py, clip_amount, visible_height;
 	int			line_height, y;
 	double		wall_x, inv_perp_wall_dist, tex_step, tex_pos, normalized;
 	Uint32		*pixel_data, *texture;
 	SDL_Rect	dest;
 
-	wind_height = WIND_HEIGHT;
+	texture_height = TEXTURE_HEIGHT;
 	tex_w = game->textures.wall.width;
 	tex_h = game->textures.wall.height;
 	inv_perp_wall_dist = 1.0 / (r->perp_wall_dist / 2);
-	line_height = (int)(wind_height * inv_perp_wall_dist);
-	start = ((wind_height - line_height) >> 1) + CAM_SHIFT
+	line_height = (int)(texture_height * inv_perp_wall_dist);
+	start = ((texture_height - line_height) >> 1) + CAM_SHIFT
 		+ (PLAYER_HEIGHT / r->perp_wall_dist);
 	normalized = (r->detected - 5) / 4.0;
 	block_height = (int)(line_height * (0.1 + (normalized * 0.8)));
@@ -46,9 +46,9 @@ void	half_down_block(t_game *game, t_raycaster *r, void *pixels)
 	while (++y < visible_height)
 	{
 		py = dest.y + y;
-		if (py >= 0 && py < wind_height)
+		if (py >= 0 && py < texture_height)
 		{
-			pixel_index = py * WIND_WIDTH + dest.x;
+			pixel_index = py * TEXTURE_WIDTH + dest.x;
 			tex_y = (int)tex_pos & (tex_h - 1);
 			tex_index = (tex_y * tex_w) + tex_x;
 			if (tex_index >= 0 && tex_index < tex_w * tex_h)
@@ -63,7 +63,7 @@ void	half_down_block(t_game *game, t_raycaster *r, void *pixels)
 
 void	half_block_up(t_game *game, t_raycaster *r, void *pixels)
 {
-	int			tex_x, tex_y, start, block_height, wind_height, tex_w, tex_h;
+	int			tex_x, tex_y, start, block_height, texture_height, tex_w, tex_h;
 	int			py;
 	int			pixel_index;
 	int			tex_index;
@@ -78,12 +78,12 @@ void	half_block_up(t_game *game, t_raycaster *r, void *pixels)
 	Uint32		*texture;
 	SDL_Rect	dest;
 
-	wind_height = WIND_HEIGHT;
+	texture_height = TEXTURE_HEIGHT;
 	tex_w = game->textures.wall.width;
 	tex_h = game->textures.wall.height;
 	inv_perp_wall_dist = 1.0 / (r->perp_wall_dist / 2);
-	line_height = ((int)(wind_height * inv_perp_wall_dist) + 4);
-	start = ((wind_height - line_height) >> 1) + CAM_SHIFT + (PLAYER_HEIGHT / r->perp_wall_dist);
+	line_height = ((int)(texture_height * inv_perp_wall_dist) + 4);
+	start = ((texture_height - line_height) >> 1) + CAM_SHIFT + (PLAYER_HEIGHT / r->perp_wall_dist);
 	normalized = r->detected / 4.0;
 	block_height = (int)(line_height * (0.1 + (normalized * 0.8)));
 	wall_x = (r->side == 0)
@@ -113,9 +113,9 @@ void	half_block_up(t_game *game, t_raycaster *r, void *pixels)
 	for (int y = 0; y < visible_height; y++)
 	{
 		py = dest.y + y;
-		if (py >= 0 && py < wind_height)
+		if (py >= 0 && py < texture_height)
 		{
-			pixel_index = py * WIND_WIDTH + dest.x;
+			pixel_index = py * TEXTURE_WIDTH + dest.x;
 			tex_y = (int)tex_pos & (tex_h - 1);
 			tex_index = (tex_y * tex_w) + tex_x;
 			if (tex_index >= 0 && tex_index < tex_w * tex_h)
@@ -130,17 +130,17 @@ void	half_block_up(t_game *game, t_raycaster *r, void *pixels)
 
 void	draw_wall(t_game *game, t_raycaster *r, void *pixels)
 {
-	int			tex_x, start, line_height, wind_height, tex_w, tex_h;
+	int			tex_x, start, line_height, texture_height, tex_w, tex_h;
 	int			clip_amount, visible_height, py, pixel_index, tex_y, tex_index;
 	double		wall_x, inv_perp_wall_dist, tex_step, tex_pos;
 	Uint32		*pixel_data, *texture;
 
-	wind_height = WIND_HEIGHT;
+	texture_height = TEXTURE_HEIGHT;
 	tex_w = game->textures.wall.width;
 	tex_h = game->textures.wall.height;
 	inv_perp_wall_dist = 1.0 / (r->perp_wall_dist / 2);
-	line_height = ((int)(wind_height * inv_perp_wall_dist) + 4);
-	start = ((wind_height - line_height) >> 1) + CAM_SHIFT
+	line_height = ((int)(texture_height * inv_perp_wall_dist) + 4);
+	start = ((texture_height - line_height) >> 1) + CAM_SHIFT
 		+ (PLAYER_HEIGHT / r->perp_wall_dist);
 	wall_x = (r->side == 0) * (r->pos_y + r->perp_wall_dist * r->ray_dir_y)
 		+ (r->side == 1) * (r->pos_x + r->perp_wall_dist * r->ray_dir_x);
@@ -162,9 +162,9 @@ void	draw_wall(t_game *game, t_raycaster *r, void *pixels)
 	py = -1;
 	while (++py < visible_height)
 	{
-		if (start + py >= 0 && start + py < wind_height)
+		if (start + py >= 0 && start + py < texture_height)
 		{
-			pixel_index = (start + py) * WIND_WIDTH + r->x;
+			pixel_index = (start + py) * TEXTURE_WIDTH + r->x;
 			tex_y = (int)tex_pos & (tex_h - 1);
 			tex_index = (tex_y * tex_w) + tex_x;
 			if (tex_index >= 0 && tex_index < tex_w * tex_h)

@@ -13,13 +13,11 @@
 # include <stdio.h>
 # include <fcntl.h>
 
-# define MAP_WIDTH 50 //to be removed
-# define MAP_HEIGHT 25 // to be removed
-
 //==============================MACROS
 // SETTINGS
+# define DOWNSCALE			2
 # define FOV				53
-# define FPS_CAP			60
+# define FPS_CAP			121
 # define DEFAULT_SPEED		2
 # define MOUSE_SENSIT		0.01
 # define JOY_SENSIT			2
@@ -247,16 +245,20 @@ typedef struct s_textures
 typedef struct s_game
 {
 	float					fps;
+	double					frame_time;
 	SDL_Event				event;
 	t_input					input;
 	int						level;
 	SDL_Window				*window;
 	char					***maps;
+	t_point					*maps_sizes;
 	t_player				**player;
 	t_enemy					***enemy;
 	int						moving;
 	t_textures				textures;
 	SDL_Renderer			*renderer;
+	int						texture_width;
+	int						texture_height;
 	int						wind_width;
 	int						wind_height;
 	float					*z_buffer;
@@ -290,6 +292,8 @@ typedef struct s_rendering_threads
 # define PLAYER_CAM_X		game->player[(LEVEL)]->cam.x
 # define PLAYER_CAM_Y		game->player[(LEVEL)]->cam.y
 # define PLAYER_SPEED		game->player[(LEVEL)]->speed
+# define MAP_WIDTH			game->maps_sizes[(LEVEL)].x
+# define MAP_HEIGHT			game->maps_sizes[(LEVEL)].y
 # define PLAYER				game->player
 # define MOUSE_X			game->input.mouse_x_rel
 # define MOUSE_Y			game->input.mouse_y_rel
@@ -299,6 +303,7 @@ typedef struct s_rendering_threads
 # define JOYSTICK_Y			game->input.joystick_velocity_y
 # define KEYS				game->input.keys
 # define FPS				game->fps
+# define FRAME_TIME			game->frame_time
 # define MAPS				game->maps
 # define LEVEL				game->level
 # define EVENT				game->event
@@ -307,6 +312,8 @@ typedef struct s_rendering_threads
 # define SOUNDS				game->sounds
 # define WINDOW				game->window
 # define RENDERER			game->renderer
+# define TEXTURE_WIDTH			game->texture_width
+# define TEXTURE_HEIGHT		game->texture_height
 # define WIND_WIDTH			game->wind_width
 # define WIND_HEIGHT		game->wind_height
 

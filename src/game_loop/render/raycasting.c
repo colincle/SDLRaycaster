@@ -99,7 +99,7 @@ void	init_raycaster(t_raycaster *r, t_game *game)
 	r->pos_y = PLAYER_Y;
 	r->map_x = (int)r->pos_x;
 	r->map_y = (int)r->pos_y;
-	r->cam_x = 2.0f * (float)r->x / (float)WIND_WIDTH - 1.0f;
+	r->cam_x = 2.0f * (float)r->x / (float)TEXTURE_WIDTH - 1.0f;
 	r->ray_dir_x = PLAYER_DIR_X + PLAYER_CAM_X * r->cam_x;
 	r->ray_dir_y = PLAYER_DIR_Y + PLAYER_CAM_Y * r->cam_x;
 	if (r->ray_dir_x == 0.0f)

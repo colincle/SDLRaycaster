@@ -9,7 +9,7 @@ void	set_player_cam(t_game *game, int i)
 {
 	double	fov_rad;
 	double	h_fov_rad;
-	double	aspect_ratio = (double)WIND_WIDTH / (double)WIND_HEIGHT;
+	double	aspect_ratio = (double)TEXTURE_WIDTH / (double)TEXTURE_HEIGHT;
 
 	fov_rad = (FOV * M_PI) / 180.0;
 	h_fov_rad = 2 * atan(tan(fov_rad / 2) * aspect_ratio);

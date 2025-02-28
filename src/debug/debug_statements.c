@@ -89,7 +89,7 @@ void	print_all_maps(t_game *game)
 	}
 	while (game->maps[i])
 	{
-		printf("Map %d:\n", i + 1);
+		printf("Map %d width %d height %d\n", i + 1, game->maps_sizes[i].x,game->maps_sizes[i].y);
 		j = 0;
 		while (game->maps[i][j])
 		{

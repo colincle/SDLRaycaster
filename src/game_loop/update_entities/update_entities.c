@@ -29,9 +29,9 @@ static void	update_player(t_game *game)
 		MOVING = STILL;
 	if (JUMP)
 		jump(game);
-	crouch(game);
-	gravity(game);
-	update_player_height(game);
+	// crouch(game);
+	// gravity(game);
+	// update_player_height(game);
 }
 
 void	update_entities(t_game *game)

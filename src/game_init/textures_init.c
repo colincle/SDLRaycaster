@@ -47,8 +47,8 @@ void	load_textures(t_game *game)
 			game->renderer,
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STREAMING,
-			WIND_WIDTH,
-			WIND_HEIGHT
+			TEXTURE_WIDTH,
+			TEXTURE_HEIGHT
 			);
 	if (!game->textures.screen_texture)
 	{

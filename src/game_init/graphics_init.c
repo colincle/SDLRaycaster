@@ -28,14 +28,17 @@ void	init_graphics(t_game *game)
 		cleanup(game);
 	}
 	SDL_GetWindowSize(WINDOW, &WIND_WIDTH, &WIND_HEIGHT);
+	TEXTURE_WIDTH = WIND_WIDTH / DOWNSCALE;
+	TEXTURE_HEIGHT = WIND_HEIGHT / DOWNSCALE;
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 }
 
 void	pixel_buffers_init(t_game *game)
 {
-	game->z_buffer = calloc(WIND_HEIGHT * WIND_WIDTH, sizeof(float));
+	game->z_buffer = calloc(TEXTURE_HEIGHT * TEXTURE_WIDTH, sizeof(float));
 	if (!game->z_buffer)
 		cleanup(game);
-	game->screen = calloc(WIND_HEIGHT * WIND_WIDTH, sizeof(float));
+	game->screen = calloc(TEXTURE_HEIGHT * TEXTURE_WIDTH, sizeof(float));
 	if (!game->z_buffer)
 		cleanup(game);
 }

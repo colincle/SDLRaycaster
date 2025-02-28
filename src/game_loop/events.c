@@ -29,7 +29,10 @@ void	handle_events(t_game *game, int *running)
 		{
 			keydown(game, EVENT.key.keysym.sym);
 			if (EVENT.key.keysym.sym == SDLK_SPACE)
+			{
+				CROUCH = STANDING;
 				JUMP = JUMP_UP;
+			}
 			else if (EVENT.key.keysym.sym == SDLK_k && !JUMP) // to be removed
 				printf("PLAYER_HEIGHT = %d\n", --PLAYER_HEIGHT); // to be removed
 			else if (EVENT.key.keysym.sym == SDLK_i && !JUMP) // to be removed

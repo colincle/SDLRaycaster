@@ -8,7 +8,10 @@
 void	controller_keydown(t_game *game, SDL_GameControllerButton button)
 {
 	if (button == SDL_CONTROLLER_BUTTON_A)
+	{
+		CROUCH = STANDING;
 		JUMP = JUMP_UP;
+	}
 	else if (button == SDL_CONTROLLER_BUTTON_B)
 		KEYS[C] = TRUE;
 	else if (SDL_CONTROLLER_BUTTON_LEFTSTICK)

@@ -27,6 +27,11 @@ static void	level_trigger(t_game *game)
 		game->player[LEVEL + 1]->standing_on = STANDING_ON;
 		game->player[LEVEL + 1]->jumping = JUMP;
 		game->player[LEVEL + 1]->crouching = CROUCH;
+		game->player[LEVEL + 1]->speed = PLAYER_SPEED;
+		game->player[LEVEL + 1]->crouch_lock = CROUCH_LOCK;
+		game->player[LEVEL + 1]->stand_lock = STAND_LOCK;
+		game->player[LEVEL + 1]->falling = FALLING;
+		game->player[LEVEL + 1]->jump_lock = JUMP_LOCK;
 		LEVEL++;
 	}
 }

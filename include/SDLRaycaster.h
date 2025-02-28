@@ -123,6 +123,10 @@ typedef struct s_entity
 	int						standing_on;
 	int						jumping;
 	int						crouching;
+	int						crouch_lock;
+	int						stand_lock;
+	int						jump_lock;
+	int						falling;
 	int						speed;
 }							t_player;
 typedef struct s_enemy
@@ -285,7 +289,11 @@ typedef struct s_rendering_threads
 // STRUCT ACCESS MACROS
 # define CAM_SHIFT			game->player[LEVEL]->camera_shift
 # define JUMP				game->player[LEVEL]->jumping
+# define JUMP_LOCK			game->player[LEVEL]->jump_lock
 # define CROUCH				game->player[LEVEL]->crouching
+# define CROUCH_LOCK		game->player[LEVEL]->crouch_lock
+# define STAND_LOCK			game->player[LEVEL]->stand_lock
+# define FALLING			game->player[LEVEL]->falling
 # define STANDING_ON		game->player[LEVEL]->standing_on
 # define PLAYER_X			game->player[(LEVEL)]->x
 # define PLAYER_Y			game->player[(LEVEL)]->y

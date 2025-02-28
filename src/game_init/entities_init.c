@@ -42,6 +42,10 @@ static void	find_entities(t_game *game, int i)
 				game->player[i]->standing_on = EMPTY;
 				game->player[i]->jumping = NO_JUMP;
 				game->player[i]->crouching = 0;
+				game->player[i]->stand_lock = 0;
+				game->player[i]->crouch_lock = 0;
+				game->player[i]->falling = 0;
+				game->player[i]->jump_lock = 0;
 				game->player[i]->speed = DEFAULT_SPEED;
 				game->player[i]->x = x + 0.5;
 				game->player[i]->y = y + 0.5;

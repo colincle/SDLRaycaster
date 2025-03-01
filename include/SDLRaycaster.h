@@ -28,7 +28,7 @@
 // DEBUG
 # define START_LEVEL		0
 # define SHOW_MINIMAP 		FALSE
-# define SHOW_FPS			FALSE
+# define SHOW_FPS			TRUE
 # define PRINT_ENTITIES 	FALSE
 # define PRINT_MAPS 		FALSE
 # define SHOW_POSITION		FALSE

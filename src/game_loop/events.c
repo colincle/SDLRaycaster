@@ -55,7 +55,7 @@ void	handle_events(t_game *game, int *running)
 		else if (EVENT.type == SDL_CONTROLLERBUTTONUP)
 		{
 			controller_keyup(game, EVENT.cbutton.button);
-		}		
+		}
 		else if (EVENT.type == SDL_QUIT)
 		{
 			*running = 0;

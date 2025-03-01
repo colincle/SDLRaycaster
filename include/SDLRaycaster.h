@@ -28,7 +28,7 @@
 // DEBUG
 # define START_LEVEL		0
 # define SHOW_MINIMAP 		FALSE
-# define SHOW_FPS			TRUE
+# define SHOW_FPS			FALSE
 # define PRINT_ENTITIES 	FALSE
 # define PRINT_MAPS 		FALSE
 # define SHOW_POSITION		FALSE
@@ -120,7 +120,8 @@ typedef struct s_entity
 	t_float_xy				dir;
 	t_float_xy				cam;
 	int						camera_shift;
-	int						standing_on;
+	int						feet_touch;
+	int						head_touch;
 	int						jumping;
 	int						crouching;
 	int						crouch_lock;
@@ -153,6 +154,9 @@ typedef struct s_heights
 	int						crawl;
 	int						jump;
 	int						height_cap;
+	int						empty_height_cap;
+	int						wall_6_height_cap;
+	int						wall_5_height_cap;
 	int						feet_height;
 	int						eye_height;
 	int						player_height;
@@ -294,7 +298,8 @@ typedef struct s_rendering_threads
 # define CROUCH_LOCK		game->player[LEVEL]->crouch_lock
 # define STAND_LOCK			game->player[LEVEL]->stand_lock
 # define FALLING			game->player[LEVEL]->falling
-# define STANDING_ON		game->player[LEVEL]->standing_on
+# define FEET_TOUCH			game->player[LEVEL]->feet_touch
+# define HEAD_TOUCH			game->player[LEVEL]->head_touch
 # define PLAYER_X			game->player[(LEVEL)]->x
 # define PLAYER_Y			game->player[(LEVEL)]->y
 # define PLAYER_DIR_X		game->player[(LEVEL)]->dir.x
@@ -326,25 +331,27 @@ typedef struct s_rendering_threads
 # define TEXTURE_HEIGHT		game->texture_height
 # define WIND_WIDTH			game->wind_width
 # define WIND_HEIGHT		game->wind_height
-#define EMPTY_HEIGHT		game->heights.empty
-#define WALL_0_HEIGHT		game->heights.wall_0
-#define WALL_1_HEIGHT		game->heights.wall_1
-#define WALL_2_HEIGHT		game->heights.wall_2
-#define WALL_3_HEIGHT		game->heights.wall_3
-#define WALL_4_HEIGHT		game->heights.wall_4
-#define WALL_5_HEIGHT		game->heights.wall_5
-#define WALL_6_HEIGHT		game->heights.wall_6
-#define WALL_7_HEIGHT		game->heights.wall_7
-#define WALL_8_HEIGHT		game->heights.wall_8
-#define WALL_9_HEIGHT		game->heights.wall_9
-#define CROUCH_HEIGHT		game->heights.crouch
-#define CRAWL_HEIGHT		game->heights.crawl
-#define JUMP_HEIGHT			game->heights.jump
-#define HEIGHT_CAP			game->heights.height_cap
-#define FEET_HEIGHT			game->heights.feet_height
-#define EYE_HEIGHT			game->heights.eye_height
-#define PLAYER_HEIGHT		game->heights.player_height
-
+# define EMPTY_HEIGHT		game->heights.empty
+# define WALL_0_HEIGHT		game->heights.wall_0
+# define WALL_1_HEIGHT		game->heights.wall_1
+# define WALL_2_HEIGHT		game->heights.wall_2
+# define WALL_3_HEIGHT		game->heights.wall_3
+# define WALL_4_HEIGHT		game->heights.wall_4
+# define WALL_5_HEIGHT		game->heights.wall_5
+# define WALL_6_HEIGHT		game->heights.wall_6
+# define WALL_7_HEIGHT		game->heights.wall_7
+# define WALL_8_HEIGHT		game->heights.wall_8
+# define WALL_9_HEIGHT		game->heights.wall_9
+# define CROUCH_HEIGHT		game->heights.crouch
+# define CRAWL_HEIGHT		game->heights.crawl
+# define JUMP_HEIGHT		game->heights.jump
+# define HEIGHT_CAP			game->heights.height_cap
+# define EMPTY_HEIGHT_CAP	game->heights.empty_height_cap
+# define W6_HEIGHT_CAP		game->heights.wall_6_height_cap
+# define W5_HEIGHT_CAP		game->heights.wall_5_height_cap
+# define FEET_HEIGHT		game->heights.feet_height
+# define EYE_HEIGHT			game->heights.eye_height
+# define PLAYER_HEIGHT		game->heights.player_height
 
 //==============================FUNCTIONS
 // controller.c

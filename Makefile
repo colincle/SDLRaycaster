@@ -78,6 +78,16 @@ $(TARGET): $(OBJ)
 	@printf " | |_) | (_| | (__|   <| | | (_) | (_) | | | | | \\__ \\ \n"
 	@printf " |____/ \\__,_|\\___|_|\\_|_|  \\___/ \\___/|_| |_| |_|___/\n"
 	@printf "$(RESET_COLOR)\n"
+	@printf "\033[1;36m---------------------------------------\033[0m\n"
+	@printf "\033[1;32m CONTROLS:\033[0m\n"
+	@printf "\033[1;34m ➤ Look Around:\033[0m ⌨️ Mouse / 🎮 Right stick\n"
+	@printf "\033[1;34m ➤ Move:\033[0m ⌨️ WASD / 🎮 Left Stick\n"
+	@printf "\033[1;34m ➤ Run:\033[0m ⌨️ Shift / 🎮 L3\n"
+	@printf "\033[1;34m ➤ Jump:\033[0m ⌨️ Space / 🎮 Cross\n"
+	@printf "\033[1;34m ➤ Crouch:\033[0m ⌨️ C / 🎮 Circle\n"
+	@printf "\033[1;34m ➤ Crawl:\033[0m ⌨️ Hold C / 🎮 Hold Circle\n"
+	@printf "\033[1;36m---------------------------------------\033[0m\n"
+
 
 clean:
 	@rm -rf $(OBJ_DIR)

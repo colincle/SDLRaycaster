@@ -7,18 +7,15 @@
 
 int	set_height(t_game *game, float percentage)
 {
-	// Clamp percentage between 0 and 100
+	float	scaled_height;
+
 	if (percentage < 0.0f)
 		percentage = 0.0f;
 	if (percentage > 100.0f)
 		percentage = 100.0f;
-
-	// Scale percentage from 0% (ground) to 100% (twice the texture height)
-	float scaled_height = (percentage / 100.0f) * (TEXTURE_HEIGHT * 2.0f);
-
-	return (int)scaled_height;
+	scaled_height = (percentage / 100.0f) * (TEXTURE_HEIGHT * 2.0f);
+	return ((int)scaled_height);
 }
-
 
 static void	get_P_cores(t_game *game)
 {
@@ -71,8 +68,8 @@ static void	heights_init(t_game *game)
 	game->heights.wall_1 = set_height(game, 30);
 	game->heights.wall_2 = set_height(game, 50);
 	game->heights.wall_3 = set_height(game, 70);
-	game->heights.wall_4 = set_height(game, 80);
-	game->heights.wall_5 = set_height(game, 80);
+	game->heights.wall_4 = set_height(game, 90);
+	game->heights.wall_5 = set_height(game, 90);
 	game->heights.wall_6 = set_height(game, 70);
 	game->heights.wall_7 = set_height(game, 50);
 	game->heights.wall_8 = set_height(game, 30);
@@ -81,15 +78,13 @@ static void	heights_init(t_game *game)
 	game->heights.crawl = set_height(game, 20);
 	game->heights.jump = set_height(game, 25);
 	game->heights.height_cap = set_height(game, 45);
+	game->heights.empty_height_cap = set_height(game, 45);
+	game->heights.wall_6_height_cap = set_height(game, 20);
+	game->heights.wall_5_height_cap = set_height(game, 30);
 	game->heights.player_height = set_height(game, 50);
 	game->heights.eye_height = set_height(game, 50);
 	game->heights.feet_height = set_height(game, 0);
-	
-	printf("feet %d%c------------------------%c", FEET_HEIGHT, 10, 10);
-	fflush(stdout); // Debug
 }
-
-
 
 t_game	*init_game(void)
 {
@@ -107,6 +102,5 @@ t_game	*init_game(void)
 	print_entities(game);
 	pixel_buffers_init(game);
 	heights_init(game);
-
 	return (game);
 }

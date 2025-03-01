@@ -57,7 +57,6 @@ void	move_player(t_game *game, int key)
 		MOVING = RUNNING;
 }
 
-
 void	move_player_joystick(t_game *game, float x, float y)
 {
 	float	move_x = PLAYER_X;

@@ -39,7 +39,7 @@ static void	find_entities(t_game *game, int i)
 					exit(EXIT_FAILURE);
 				}
 				game->player[i]->camera_shift = 0;
-				game->player[i]->standing_on = EMPTY;
+				game->player[i]->feet_touch = EMPTY;
 				game->player[i]->jumping = NO_JUMP;
 				game->player[i]->crouching = 0;
 				game->player[i]->stand_lock = 0;

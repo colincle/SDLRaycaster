@@ -38,8 +38,10 @@ static int	get_block_height(t_game *game, char block)
 		return (WALL_2_HEIGHT);
 	else if (block == WALL_3)
 		return (WALL_3_HEIGHT);
-	else if (block == WALL_4)
-		return (WALL_4_HEIGHT);
+	else if (block == WALL_5)
+		return (WALL_5_HEIGHT);
+	else if (block == WALL_6)
+		return (WALL_6_HEIGHT);
 	else if (block == WALL_7)
 		return (WALL_7_HEIGHT);
 	else if (block == WALL_8)
@@ -59,8 +61,8 @@ static int	check_circle_collision(t_game *game, float x, float y)
 	collision_found = FALSE;
 	best_diff = INT_MAX;
 	ceiling_best_diff = -INT_MAX;
-	best_block = STANDING_ON;
-	ceiling_best_block = STANDING_ON;
+	best_block = FEET_TOUCH;
+	ceiling_best_block = EMPTY;
 	found = 0;
 	diag_offset = COLLISION_RADIUS / sqrtf(2.0f);
 	offsets[0][0] = diag_offset;
@@ -79,13 +81,10 @@ static int	check_circle_collision(t_game *game, float x, float y)
 		cell_x = (int)floorf(px);
 		cell_y = (int)floorf(py);
 		block = MAPS[LEVEL][cell_y][cell_x];
-
 		if (!traversable(game, block))
 			collision_found = TRUE;
-
 		block_ht = get_block_height(game, block);
-
-		if (block == WALL_7 || block == WALL_8) // Low ceilings
+		if (block == WALL_5 || block == WALL_6 || block == WALL_7 || block == WALL_8)
 		{
 			if (block_ht > PLAYER_HEIGHT && block_ht > ceiling_best_diff)
 			{
@@ -93,7 +92,7 @@ static int	check_circle_collision(t_game *game, float x, float y)
 				ceiling_best_block = block;
 			}
 		}
-		else // Regular floors
+		else
 		{
 			diff = abs(FEET_HEIGHT - block_ht);
 			if (diff < best_diff)
@@ -104,16 +103,13 @@ static int	check_circle_collision(t_game *game, float x, float y)
 			}
 		}
 	}
-
-	// If a valid ceiling block was found, prioritize it
-	if (ceiling_best_diff != -INT_MAX)
-		STANDING_ON = ceiling_best_block;
+	HEAD_TOUCH = ceiling_best_block;
+	if (found)
+		FEET_TOUCH = best_block;
 	else
-		STANDING_ON = found ? best_block : MAPS[LEVEL][(int)floorf(y)][(int)floorf(x)];
-
+		FEET_TOUCH = MAPS[LEVEL][(int)floorf(y)][(int)floorf(x)];
 	return (collision_found);
 }
-
 
 void	collisions(t_game *game, float new_x, float new_y)
 {
@@ -128,12 +124,12 @@ void	collisions(t_game *game, float new_x, float new_y)
 		PLAYER_X = temp_x;
 	if (!check_circle_collision(game, PLAYER_X, temp_y))
 		PLAYER_Y = temp_y;
-	if (STANDING_ON == WALL_7 || STANDING_ON == WALL_8)
+	if (HEAD_TOUCH == WALL_7 || HEAD_TOUCH == WALL_8)
 	{
 		JUMP_LOCK = TRUE;
 		STAND_LOCK = TRUE;
 	}
-	else if (STANDING_ON == WALL_2 || STANDING_ON == WALL_3)
+	else if (FEET_TOUCH == WALL_2 || FEET_TOUCH == WALL_3)
 	{
 		JUMP_LOCK = TRUE;
 		CROUCH_LOCK = TRUE;
@@ -144,5 +140,10 @@ void	collisions(t_game *game, float new_x, float new_y)
 		JUMP_LOCK = FALSE;
 		STAND_LOCK = FALSE;
 	}
-	printf("STANDING_ON %d%c------------------------%c", STANDING_ON, 10, 10); fflush(stdout); //debug
+	if (HEAD_TOUCH == WALL_5)
+		HEIGHT_CAP = W5_HEIGHT_CAP;
+	else if (HEAD_TOUCH == WALL_6)
+		HEIGHT_CAP = W6_HEIGHT_CAP;
+	else
+		HEIGHT_CAP = EMPTY_HEIGHT_CAP;
 }

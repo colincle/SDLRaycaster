@@ -219,6 +219,7 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 void	cast_offset_height_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_threads *thread)
 {
 	int	height = PLAYER_HEIGHT;
+
 	if (height >= EMPTY_HEIGHT && height <= WALL_1_HEIGHT)
 	{
 		draw_floor_tile(thread->game, f, thread, WALL_0);

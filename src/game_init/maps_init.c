@@ -9,7 +9,7 @@ t_point	get_map_size(char **map)
 {
 	int		x;
 	t_point	sizes;
-	
+
 	x = 0;
 	sizes.x = 0;
 	sizes.y = 0;

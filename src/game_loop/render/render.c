@@ -16,8 +16,10 @@ static void	render_mini_rays(t_game *game, t_mini_ray **head, void *pixels)
 		{
 			half_block_up(game, &current->ray, pixels);
 		}
-		else
+		else if (current->ray.detected < 10)
 			half_down_block(game, &current->ray, pixels);
+		else
+			hole_block(game, &current->ray, pixels);
 		temp = current;
 		current = current->next;
 		free(temp);

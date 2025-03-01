@@ -28,6 +28,8 @@ static int	traversable(t_game *game, char c)
 
 static int	get_block_height(t_game *game, char block)
 {
+	if (block == HOLE)
+		return (HOLE_HEIGHT);
 	if (block == EMPTY)
 		return (EMPTY_HEIGHT);
 	else if (block == WALL_0)

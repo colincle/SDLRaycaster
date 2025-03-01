@@ -9,13 +9,12 @@ int	set_height(t_game *game, float percentage)
 {
 	float	scaled_height;
 
-	if (percentage < 0.0f)
-		percentage = 0.0f;
 	if (percentage > 100.0f)
 		percentage = 100.0f;
 	scaled_height = (percentage / 100.0f) * (TEXTURE_HEIGHT * 2.0f);
 	return ((int)scaled_height);
 }
+
 
 static void	get_P_cores(t_game *game)
 {
@@ -63,6 +62,7 @@ static t_game	*game_struct_init(void)
 
 static void	heights_init(t_game *game)
 {
+	game->heights.hole = set_height(game, -100);
 	game->heights.empty = set_height(game, 0);
 	game->heights.wall_0 = set_height(game, 10);
 	game->heights.wall_1 = set_height(game, 30);

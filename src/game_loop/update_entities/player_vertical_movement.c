@@ -110,9 +110,14 @@ void	gravity(t_game *game)
 	int				goal_height;
 	float			rise_speed = JUMP_HEIGHT * dt;
 
+	printf("FEET_TOUCH %c%c------------------------%c", FEET_TOUCH + '0', 10, 10); fflush(stdout); //debug
+	printf("FEET_HEIGHT %d%c------------------------%c", FEET_HEIGHT, 10, 10); fflush(stdout); //debug
+	printf("HOLE_HEIGHT %d%c------------------------%c", HOLE_HEIGHT, 10, 10); fflush(stdout); //debug
 	if (JUMP)
 		return ;
 	goal_height = 0;
+	if (FEET_TOUCH == HOLE)
+		goal_height = HOLE_HEIGHT;
 	if (FEET_TOUCH == EMPTY)
 		goal_height = EMPTY_HEIGHT;
 	else if (FEET_TOUCH == WALL_0)

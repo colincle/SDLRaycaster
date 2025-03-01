@@ -67,6 +67,7 @@
 # define DOOR_CLOSING		'd'
 # define DOOR_OPENING		'u'
 # define TRIGGER			'T'
+# define HOLE				':'
 
 // KEYS
 # define W					0
@@ -139,6 +140,7 @@ typedef struct s_enemy
 
 typedef struct s_heights
 {
+	int						hole;
 	int						empty;
 	int						wall_0;
 	int						wall_1;
@@ -331,6 +333,7 @@ typedef struct s_rendering_threads
 # define TEXTURE_HEIGHT		game->texture_height
 # define WIND_WIDTH			game->wind_width
 # define WIND_HEIGHT		game->wind_height
+# define HOLE_HEIGHT		game->heights.hole
 # define EMPTY_HEIGHT		game->heights.empty
 # define WALL_0_HEIGHT		game->heights.wall_0
 # define WALL_1_HEIGHT		game->heights.wall_1
@@ -432,6 +435,7 @@ void						render_next_frame(t_game *game);
 // wall_render.c
 void						half_down_block(t_game *game, t_raycaster *r, void *pixels);
 void						half_block_up(t_game *game, t_raycaster *r, void *pixels);
+void						hole_block(t_game *game, t_raycaster *r, void *pixels);
 void						draw_wall(t_game *game, t_raycaster *r, void *pixels);
 
 // z_buffer.c

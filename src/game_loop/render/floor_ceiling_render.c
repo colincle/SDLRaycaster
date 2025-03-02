@@ -46,8 +46,9 @@ static void	draw_floor_tile(t_game *game, t_floor_ceiling *f, t_rendering_thread
 				floor_color = f->floor_pixels[game->textures.floor_light.width
 					* floor_ty + floor_tx] | 0x010101;
 				px = x;
-				if (check_z_buffer(game, row_start + px, row_distance))
-					f->pixels[row_start + px] = floor_color;
+				int pixel_index = row_start + px;
+				if (!(pixel_index < 0 || pixel_index >= TEXTURE_WIDTH * TEXTURE_HEIGHT) && check_z_buffer(game, pixel_index, row_distance))
+					f->pixels[pixel_index] = floor_color;
 			}
 			floor_x += step_x;
 			floor_y += step_y;
@@ -97,7 +98,7 @@ static void	draw_ceiling_tile(t_game *game, t_floor_ceiling *f, t_rendering_thre
 					* ceiling_ty + ceiling_tx] | 0x010101;
 				px = x;
 				pixel_index = row_start + px;
-				if (check_z_buffer(game, pixel_index, row_distance))
+				if (!(pixel_index < 0 || pixel_index >= TEXTURE_WIDTH * TEXTURE_HEIGHT) && check_z_buffer(game, pixel_index, row_distance))
 					f->pixels[pixel_index] = ceiling_color;
 			}
 			ceiling_x += step_x;
@@ -136,9 +137,11 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 		{
 			cell_x = (int)ceiling_x;
 			cell_y = (int)ceiling_y;
-			if (cell_x >= 0 && cell_y >= 0 && cell_x < MAP_WIDTH
-				&& cell_y < MAP_HEIGHT
-				&& ((MAPS[LEVEL][cell_y][cell_x] == EMPTY || MAPS[LEVEL][cell_y][cell_x] == TRIGGER)
+			if (cell_x >= 0 && cell_y >= 0 && cell_x < MAP_WIDTH && cell_y < MAP_HEIGHT
+				&& (MAPS[LEVEL][cell_y][cell_x] == EMPTY
+				|| MAPS[LEVEL][cell_y][cell_x] == TRIGGER
+				|| MAPS[LEVEL][cell_y][cell_x] == HOLE
+				|| MAPS[LEVEL][cell_y][cell_x] == PILLAR
 				|| IS_HALF_BLOCK_UP(MAPS[LEVEL][cell_y][cell_x])))
 			{
 				if (f->ceiling_pixels)
@@ -154,10 +157,11 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 						{
 							px = x + dx;
 							py = y + dy;
+							int pixel_index = py * TEXTURE_WIDTH + px;
 							if (px >= thread->start && px < thread->end && py >= 0 && py < TEXTURE_HEIGHT)
 							{
-								if (check_z_buffer(game, py * TEXTURE_WIDTH + px, row_distance))
-									f->pixels[py * TEXTURE_WIDTH + px] = ceiling_color;
+								if (!(pixel_index < 0 || pixel_index >= TEXTURE_WIDTH * TEXTURE_HEIGHT) && check_z_buffer(game, pixel_index, row_distance))
+									f->pixels[pixel_index] = ceiling_color;
 							}
 						}
 					}
@@ -167,6 +171,8 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 			ceiling_y += step_y;
 		}
 	}
+	if (PLAYER_HEIGHT < EMPTY_HEIGHT)
+		return ;
 	pos_z = 0.5 * TEXTURE_HEIGHT + ((PLAYER_HEIGHT - TEXTURE_HEIGHT) / 2);
 	for (y = f->horizon; y < TEXTURE_HEIGHT; y++)
 	{
@@ -180,10 +186,11 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 		{
 			cell_x = (int)floor_x;
 			cell_y = (int)floor_y;
-			if (cell_x >= 0 && cell_y >= 0 && cell_x < MAP_WIDTH
-				&& cell_y < MAP_HEIGHT
-				&& ((MAPS[LEVEL][cell_y][cell_x] == EMPTY || MAPS[LEVEL][cell_y][cell_x] == TRIGGER)
-				|| IS_HALF_BLOCK_DOWN(MAPS[LEVEL][cell_y][cell_x])))
+			if (cell_x >= 0 && cell_y >= 0 && cell_x < MAP_WIDTH && cell_y < MAP_HEIGHT
+				&& ((MAPS[LEVEL][cell_y][cell_x] == EMPTY
+					|| MAPS[LEVEL][cell_y][cell_x] == TRIGGER)
+					|| MAPS[LEVEL][cell_y][cell_x] == PILLAR
+					|| IS_HALF_BLOCK_DOWN(MAPS[LEVEL][cell_y][cell_x])))
 			{
 				if (f->floor_pixels)
 				{
@@ -200,10 +207,11 @@ void	cast_floor_and_ceiling(t_game *game, t_floor_ceiling *f, t_rendering_thread
 							py = y + dy;
 							if (px >= thread->start && px < thread->end && py < TEXTURE_HEIGHT)
 							{
-								if (check_z_buffer(game, py * TEXTURE_WIDTH + px, row_distance))
+								int pixel_index = py * TEXTURE_WIDTH + px;
+								if (!(pixel_index < 0 || pixel_index >= TEXTURE_WIDTH * TEXTURE_HEIGHT) && check_z_buffer(game, pixel_index, row_distance))
 								{
-									set_z_buffer(game, row_distance, py * TEXTURE_WIDTH + px);
-									f->pixels[py * TEXTURE_WIDTH + px] = floor_color;
+									set_z_buffer(game, row_distance, pixel_index);
+									f->pixels[pixel_index] = floor_color;
 								}
 							}
 						}

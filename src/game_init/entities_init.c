@@ -49,25 +49,35 @@ static void	find_entities(t_game *game, int i)
 				game->player[i]->speed = DEFAULT_SPEED;
 				game->player[i]->x = x + 0.5;
 				game->player[i]->y = y + 0.5;
+				game->player[i]->spawn.x = x + 0.5;
+				game->player[i]->spawn.y = y + 0.5;
 				if (MAPS[i][y][x] == P_NORTH)
 				{
 					game->player[i]->dir.x = 0;
 					game->player[i]->dir.y = -1;
+					game->player[i]->spawn_dir.x = 0;
+					game->player[i]->spawn_dir.y = -1;
 				}
 				if (MAPS[i][y][x] == P_SOUTH)
 				{
 					game->player[i]->dir.x = 0;
 					game->player[i]->dir.y = 1;
+					game->player[i]->spawn_dir.x = 0;
+					game->player[i]->spawn_dir.y = 1;
 				}
 				if (MAPS[i][y][x] == P_EAST)
 				{
 					game->player[i]->dir.x = 1;
 					game->player[i]->dir.y = 0;
+					game->player[i]->spawn_dir.x = 1;
+					game->player[i]->spawn_dir.y = 0;
 				}
 				if (MAPS[i][y][x] == P_WEST)
 				{
 					game->player[i]->dir.x = -1;
 					game->player[i]->dir.y = 0;
+					game->player[i]->spawn_dir.x = -1;
+					game->player[i]->spawn_dir.y = 0;
 				}
 				MAPS[i][y][x] = EMPTY;
 			}

@@ -103,6 +103,18 @@ void	jump(t_game *game)
 	}
 }
 
+void	respawn(t_game *game)
+{
+	FEET_HEIGHT = EMPTY_HEIGHT;
+	FEET_TOUCH = EMPTY;
+	FALLING = FALSE;
+	PLAYER_X = game->player[LEVEL]->spawn.x;
+	PLAYER_Y = game->player[LEVEL]->spawn.y;
+	PLAYER_DIR_X = game->player[LEVEL]->spawn_dir.x;
+	PLAYER_DIR_Y = game->player[LEVEL]->spawn_dir.y;
+	set_player_cam(game, LEVEL);
+}
+
 void	gravity(t_game *game)
 {
 	static float	vertical_speed = 0.0f;
@@ -110,14 +122,13 @@ void	gravity(t_game *game)
 	int				goal_height;
 	float			rise_speed = JUMP_HEIGHT * dt;
 
-	printf("FEET_TOUCH %c%c------------------------%c", FEET_TOUCH + '0', 10, 10); fflush(stdout); //debug
-	printf("FEET_HEIGHT %d%c------------------------%c", FEET_HEIGHT, 10, 10); fflush(stdout); //debug
-	printf("HOLE_HEIGHT %d%c------------------------%c", HOLE_HEIGHT, 10, 10); fflush(stdout); //debug
 	if (JUMP)
 		return ;
 	goal_height = 0;
 	if (FEET_TOUCH == HOLE)
-		goal_height = HOLE_HEIGHT;
+		goal_height = HOLE_HEIGHT * 2;
+	if (FEET_TOUCH == PILLAR)
+		goal_height = EMPTY_HEIGHT;
 	if (FEET_TOUCH == EMPTY)
 		goal_height = EMPTY_HEIGHT;
 	else if (FEET_TOUCH == WALL_0)
@@ -146,6 +157,12 @@ void	gravity(t_game *game)
 		FEET_HEIGHT += rise_speed * 2;
 		if (FEET_HEIGHT > goal_height)
 			FEET_HEIGHT = goal_height;
+	}
+	else if (FEET_HEIGHT == goal_height)
+		FALLING = FALSE;
+	if (FEET_HEIGHT <= HOLE_HEIGHT * 2)
+	{
+		respawn(game);
 	}
 }
 

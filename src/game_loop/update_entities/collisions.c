@@ -9,6 +9,8 @@ static int	traversable(t_game *game, char c)
 {
 	if (c == WALL || c == WALL_4 || c == WALL_9)
 		return (0);
+	if (c == EMPTY || c == WALL_0)
+		return (FEET_HEIGHT >= EMPTY_HEIGHT);
 	else if (c == WALL_1)
 		return (FEET_HEIGHT >= WALL_1_HEIGHT);
 	else if (c == WALL_2)

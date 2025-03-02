@@ -24,7 +24,7 @@ static void	get_P_cores(t_game *game)
 	if (sysctlbyname("hw.perflevel0.logicalcpu", &pcores, &size, NULL, 0) == 0)
 		game->P_cores = pcores;
 	else
-		game->P_cores = 0;
+		game->P_cores = 1;
 }
 
 static t_game	*game_struct_init(void)
@@ -62,7 +62,7 @@ static t_game	*game_struct_init(void)
 
 static void	heights_init(t_game *game)
 {
-	game->heights.hole = set_height(game, -100);
+	game->heights.hole = set_height(game, -90);
 	game->heights.empty = set_height(game, 0);
 	game->heights.wall_0 = set_height(game, 10);
 	game->heights.wall_1 = set_height(game, 30);

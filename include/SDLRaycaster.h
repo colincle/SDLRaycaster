@@ -21,7 +21,7 @@
 # define DEFAULT_SPEED		2
 # define MOUSE_SENSIT		0.01
 # define JOY_SENSIT			2
-# define GRAVITY 			100
+# define GRAVITY 			50
 # define COLLISION_RADIUS	0.3f
 # define VSYNC				TRUE
 
@@ -68,6 +68,7 @@
 # define DOOR_OPENING		'u'
 # define TRIGGER			'T'
 # define HOLE				':'
+# define PILLAR				';'
 
 // KEYS
 # define W					0
@@ -118,6 +119,8 @@ typedef struct s_entity
 {
 	float					x;
 	float					y;
+	t_float_xy				spawn;
+	t_point					spawn_dir;
 	t_float_xy				dir;
 	t_float_xy				cam;
 	int						camera_shift;
@@ -194,6 +197,7 @@ struct						s_mini_ray;
 typedef struct s_raycaster
 {
 	int						detected;
+	int						first_hole;
 	int						x;
 	int						side;
 	float					pos_x;
@@ -221,6 +225,7 @@ typedef struct s_mini_ray
 {
 	t_raycaster				ray;
 	struct s_mini_ray		*next;
+	struct s_mini_ray		*prev;
 }							t_mini_ray;
 
 typedef struct s_input
@@ -329,7 +334,7 @@ typedef struct s_rendering_threads
 # define SOUNDS				game->sounds
 # define WINDOW				game->window
 # define RENDERER			game->renderer
-# define TEXTURE_WIDTH			game->texture_width
+# define TEXTURE_WIDTH		game->texture_width
 # define TEXTURE_HEIGHT		game->texture_height
 # define WIND_WIDTH			game->wind_width
 # define WIND_HEIGHT		game->wind_height
@@ -436,6 +441,7 @@ void						render_next_frame(t_game *game);
 void						half_down_block(t_game *game, t_raycaster *r, void *pixels);
 void						half_block_up(t_game *game, t_raycaster *r, void *pixels);
 void						hole_block(t_game *game, t_raycaster *r, void *pixels);
+void						pillar_block(t_game *game, t_raycaster *r, void *pixels);
 void						draw_wall(t_game *game, t_raycaster *r, void *pixels);
 
 // z_buffer.c

@@ -36,6 +36,33 @@ static int	store_mini_ray(t_mini_ray **head, t_raycaster r, char **map)
 	*head = new_node;
 	return (0);
 }
+void	find_holes_minirays(t_mini_ray *head)
+{
+	int			hole_in_sequence;
+	t_mini_ray	*current;
+
+	current = head;
+	hole_in_sequence = 0;
+	while (current)
+	{
+		if (current->ray.detected == 10 && !hole_in_sequence)
+		{
+			current->ray.first_hole = 1;
+			hole_in_sequence = 1;
+		}
+		else if (current->ray.detected == 10)
+		{
+			current->ray.first_hole = 0;
+		}
+		else
+		{
+			hole_in_sequence = 0;
+			current->ray.first_hole = 0;
+		}
+		current = current->next;
+	}
+}
+
 
 void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 {
@@ -52,9 +79,8 @@ void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 		// 		return ;
 		// 	}
 		// }
-		if (map[r->map_y][r->map_x] >= '0' && map[r->map_y][r->map_x] <= ':')
-			if (store_mini_ray(&r->mini_ray, *r, MAPS[LEVEL]))
-				cleanup(game);
+		if (store_mini_ray(&r->mini_ray, *r, MAPS[LEVEL]))
+			cleanup(game);
 		if (r->side_dist_x < r->side_dist_y)
 		{
 			r->side_dist_x += r->delta_dist_x;
@@ -68,9 +94,9 @@ void	perform_raycaster_steps(t_raycaster *r, t_game *game)
 			r->side = 1;
 		}
 	}
+	find_holes_minirays(r->mini_ray);
 	ray_has_hit_wall(r);
 }
-
 void	init_raycaster_steps(t_raycaster *r)
 {
 	if (r->ray_dir_x < 0)

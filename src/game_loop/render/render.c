@@ -12,14 +12,16 @@ static void	render_mini_rays(t_game *game, t_mini_ray **head, void *pixels)
 
 	while (current)
 	{
-		if (current->ray.detected < 5)
+		if (current->ray.detected >= 0 && current->ray.detected < 5)
 		{
 			half_block_up(game, &current->ray, pixels);
 		}
-		else if (current->ray.detected < 10)
+		else if (current->ray.detected >= 5 && current->ray.detected < 10)
 			half_down_block(game, &current->ray, pixels);
-		else
+		else if (current->ray.detected == 10 && current->ray.first_hole)
 			hole_block(game, &current->ray, pixels);
+		else if (current->ray.detected == 11 && current->ray.first_hole)
+			pillar_block(game, &current->ray, pixels);
 		temp = current;
 		current = current->next;
 		free(temp);

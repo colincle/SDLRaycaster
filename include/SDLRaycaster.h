@@ -15,7 +15,7 @@
 
 //==============================MACROS
 // SETTINGS
-# define DOWNSCALE			2
+# define DOWNSCALE			3
 # define FOV				53
 # define FPS_CAP			121
 # define DEFAULT_SPEED		2

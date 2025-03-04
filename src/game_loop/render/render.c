@@ -34,7 +34,6 @@ static void	rendering_threads(t_rendering_threads *thread)
 	t_raycaster			r;
 	t_floor_ceiling		f;
 	int					end_x;
-
 	f.pixels = thread->game->screen;
 	r.x = (thread->TEXTURE_WIDTH * thread->thread_id) / thread->total_threads;
 	end_x = (thread->TEXTURE_WIDTH * (thread->thread_id + 1)) / thread->total_threads;

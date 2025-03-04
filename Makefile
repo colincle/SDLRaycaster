@@ -4,8 +4,16 @@ ARCH ?= $(shell uname -m) # Default to current architecture
 LIBS = libs
 VENDOR_MAKEFILE = vendor/Makefile
 
-CFLAGS =	-Wall -Wextra -Wno-deprecated-declarations -arch $(ARCH) -Ofast -march=native -flto -ffast-math \
-			-funroll-loops -fno-exceptions -fomit-frame-pointer -mmacosx-version-min=10.15
+CFLAGS = -Wall -Wextra -Wno-deprecated-declarations -arch $(ARCH) -Ofast -flto -ffast-math \
+         -funroll-loops -fno-exceptions -fomit-frame-pointer -mmacosx-version-min=10.15
+
+# CFLAGS = -Wall -Wextra -Wno-deprecated-declarations -arch $(ARCH) -mmacosx-version-min=10.15
+
+ifeq ($(ARCH),x86_64)
+    CFLAGS += -march=native
+else ifeq ($(ARCH),arm64)
+    CFLAGS += -mcpu=apple-m1
+endif
 
 DEBUG_FLAGS = -fsanitize=address -g
 

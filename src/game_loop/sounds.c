@@ -7,13 +7,6 @@
 
 void	sounds(t_game *game)
 {
-	if (!Mix_PlayingMusic())
-	{
-		if (Mix_PlayMusic(SOUNDS.ambient, -1) == -1)
-		{
-			fprintf(stderr, "Failed to play music: %s\n", Mix_GetError());
-		}
-	}
 	if (MOVING == RUNNING)
 	{
 		if (Mix_Playing(2))

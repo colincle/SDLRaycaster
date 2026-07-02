@@ -174,7 +174,6 @@ typedef struct s_frames
 
 typedef struct s_sounds
 {
-	Mix_Music				*ambient;
 	Mix_Chunk				*running;
 	Mix_Chunk				*walking;
 }							t_sounds;

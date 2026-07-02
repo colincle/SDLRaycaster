@@ -119,11 +119,6 @@ static void	cleanup_sounds(t_game *game)
 {
 	if (!game)
 		return ;
-	if (SOUNDS.ambient)
-	{
-		Mix_FreeMusic(SOUNDS.ambient);
-		SOUNDS.ambient = NULL;
-	}
 	if (SOUNDS.running)
 	{
 		Mix_FreeChunk(SOUNDS.running);

@@ -1,0 +1,13 @@
+# Build output
+obj/
+SDLRaycaster
+*.o
+
+# Generated dependency libs / local SDL builds
+libs/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/

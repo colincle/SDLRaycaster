@@ -25,6 +25,8 @@ void	move_player(t_game *game, int key)
 	float	x;
 	float	y;
 
+	x = PLAYER_X;
+	y = PLAYER_Y;
 	if (key == W)
 	{
 		x = PLAYER_X + (PLAYER_DIR_X * PLAYER_SPEED * FRAME_TIME);

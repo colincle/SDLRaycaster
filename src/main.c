@@ -5,7 +5,6 @@ void	quit_game(t_game *game)
 	SDL_DestroyWindow(WINDOW);
 	SDL_DestroyRenderer(RENDERER);
 	SDL_Quit();
-	exit(EXIT_SUCCESS);
 }
 
 static void	level_trigger(t_game *game)

@@ -145,6 +145,7 @@ void	cleanup(t_game *game)
 		game->screen = NULL;
 	}
 	free_entities(game);
-	free(game);
 	quit_game(game);
+	free(game);
+	exit(EXIT_SUCCESS);
 }

@@ -17,7 +17,7 @@ hand-written.
 **Renderer**
 - Textured raycaster with per-column wall casting and a floor and ceiling caster.
 - Half-height blocks that rise from the floor or hang from the ceiling, holes you
-  can look down into, and pillars, all driven by the map characters.
+  can look down and fall into, and pillars, all driven by the map characters.
 - Multithreaded rendering, the screen is split into vertical strips across the
   available CPU cores using SDL threads.
 - Z-buffer for correct depth ordering across the multithreaded render.

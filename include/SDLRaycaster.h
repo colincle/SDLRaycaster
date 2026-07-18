@@ -103,7 +103,7 @@
 // OTHERS
 # define TRUE				1
 # define FALSE				0
-# define NUMBER_OF_MAPS		5
+# define NUMBER_OF_MAPS		4
 # define BUFFER_SIZE		64
 
 //==============================STRUCTS
